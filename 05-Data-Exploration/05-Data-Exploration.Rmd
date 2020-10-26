@@ -1,0 +1,142 @@
+---
+title: "5_Data_Exploration"
+author: "Kate Sabey"
+date: "10/25/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Data Cleaning and Exploration
+
+This module will cover:
+* loading data
+* calculating simple stats in base R
+*	merging data sets
+
+Along the way, we'll practice the following skills we already covered:
+*	logic statements
+*	manipulating data
+*	assigning objects
+
+Before analyzing your data, you'll need to start with:
+1. Data cleaning (ie. removing missing values) should be done in R so you have a record of how the data was changed. 
+2. Data exploration is a key step in scientific inquiry. Effective exploration might include transforming the data
+   (e.g. by grouping replicate populations, calculating summary statistics, etc. 
+3. Data visualization is also an important step to understanding your data, which we'll delve into more later (Section 6).
+
+## Loading data
+
+In addition to importing data from an external source (e.g. an xlsx or csv file), we can also load data from a package. Here, we'll explore the `flights` data in the data package called `nycflights13`, which contains airline on-time data for all flights leaving airports in the New York City, NY area in 2013.
+
+*Let's install this package by using `install.packages()` command then load it using the `library()` command, as we learned yesterday.*
+
+```{r load flights data}
+
+install.packages("nycflights13") # install package
+library(nycflights13) # load library
+```
+
+In addition to `flights`, you will notice the `nycflights13` package also includes other data sets including:
+*	airlines
+*	airports
+*	planes
+*	weather
+You can access them specifically using double colons following the package name `nycflights13::`, but they are also loaded in the workspace automatically.
+
+## Exploring Data Structure
+
+In data exploration, we will first describe the broad trends in the data by understanding the structure of your data set.
+
+*Write code below to answer the following questions:*
+  *1. What is the data structure? How many columns and rows are there, and what data is represented in them?*
+  *2. How many total flights and how many total flights per airline carrier?*
+  *3. Create a new data set containing just United Airlines flights*
+  *4. What are the different flight destinations?*
+
+```{r exploring data structure}
+
+# 1. What is the data structure? How many columns and rows are there, and what data is represented in them?
+View(flights) # take a look at the whole flight data set as a separate tab in R studio
+str(flights) # 336776 rows (each row is a flight) and 19 columns, confirm column classes (e.g. numeric versus factor)
+names(flights) # returns names of columns
+summary(flights) # returns relevant stats for each column
+
+# 2. How many total flights and how many total flights per airline carrier?
+carrier_table <- flights %>% 
+  group_by(carrier) %>% 
+  summarize(n()) # returns total flights (rows) per airline carrier
+carrier_table
+
+?table # this can also be accomplished using the table() function...
+carrier_table <- table(flights$carrier)
+carrier_table
+
+carrier_table <- c() # ...or using a for loop!
+for(i in unique(flights$carrier)){
+  carrier_table[i] <- nrow(subset(flights, carrier == i))
+}
+carrier_table
+
+# 3. Create a new data set containing just United Airlines flights
+flights_UA <- flights %>%
+  filter(carrier == "UA") # data set with only UA flights
+flights_UA
+nrow(flights_UA) # returns the number of United Airlines flights (~58K)
+
+flights_UA <- subset(flights, carrier == "UA") # alternative option
+
+flights_no_UA <- flights %>%
+  filter(carrier != "UA") # data set with all flights except UA
+
+# 4. What are the different flight destinations?
+flights_dest <- unique(flights$dest) # create vector of airport destinations using the unique function
+flights_dest # view airport destinations
+length(flights_dest) # get number of airport destinations (105)
+```
+
+
+## Exploring Data with Summary Statistics
+
+Next, we can try to answer more specific questions related to our potential research goals by using simple summary statistics.
+Descriptive statistics built into R include: `mean`, `sd`, `var`, `min`, `max`, `median`, `range`, and `quantile`
+
+*Write code below to answer the following questions:*
+  *1. What is the max, min, and mean flight arrival delay? How does the mean arrival delay break down by airline?*
+  *2. What is the most common flight destination?*
+  *3. What is the number of flights per month?*
+
+```{r exploring summary statistics}
+
+# 1. What is the max, min, and mean flight arrival delay? How does the mean arrival delay break down by airline?
+
+?max # check to determine function for excluding NAs in calculation
+max(flights$arr_delay, na.rm = T)
+min(flights$arr_delay, na.rm = T)
+mean(flights$arr_delay, na.rm = T)
+
+summary(flights$arr_delay) # if we don't need the values individually, can also extract them from the summary() output
+
+flights %>%
+  group_by(carrier) %>%
+  summarize(mean_delay = mean(arr_delay, na.rm = T))
+
+summary(UA$arr_delay) # delay statistics for a single airline (UA in this case)
+
+# 2. What is the most common flight destination?
+flights %>%
+  group_by(dest) %>%
+  summarize(number_flights = n()) %>%
+  arrange(desc(number_flights)) # arranges in descending order - ORD = most common
+
+# 3. What is the number of flights per month?
+flights %>%
+  group_by(month) %>%
+  summarize(number_flights = n())
+
+```
+
+
+
