@@ -1,0 +1,195 @@
+---
+title: "7_Data_Wrangling"
+author: "Kate Sabey"
+date: "10/25/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Data Wrangling
+
+This module will cover:
+* Common types of data sets in disease ecology
+* Merging data sets
+* Adding and deleting variables
+* Data cleaning tools
+
+Studies in disease ecology include the acquisition and analysis of different types of data sets. These data sets can be “messy” especially if data originate from field studies. In the real world, no experiment or field study is perfect and missing time points, sampling events or loss of samples (and therefore the data originated from them) are more common than we would like. 
+
+Some common features of data sets used in disease ecology include:
+* Data sets incorporating different argument “types” (characters, integers, numbers, dates, coordinates)
+* Data sets containing repeated measurements of individuals
+* Large external data sets (e.g. climate variables)
+* Unbalanced data
+
+In other words, our data may require a bit of cleaning becore moving forward with visualization and analysis. 
+
+## Loading, Splitting, and Merging Data
+
+First, we need to import or load our data into R!
+
+Most commonly, data sets will be as text files with comma or tab delimited columns or in an Excel spread sheet (xls or xlsx files). If you want to import spreadsheets directly into R is always a good practice to make sure that your data does not contain “false columns” (blank cells that contain calculations, formulae or typos) and that your “clean” data is in a properly labeled sheet. You can avoid some of these issues by saving your “clean” data as .csv file (comma delimited table), which will force you to clean up any cell that is not part of the main table.
+
+Remember, common ways to read data frames into R include `read_csv` or `read_table`.
+
+Sometimes, your data will be collected across different files or you'll need to utilize data sets from multiple sources. So, we'll practice combining data sets by a common identifier column using one of the `join()` functions in `dplyr`.
+
+* There are multiple `join()` functions depending on the structure of the two data frames you are trying to merge - use `?join` to see them!
+* For example, `left_join()` will retain all rows from the left-hand data set and all columns from both the left- and right-hand data sets.
+
+##### You may also want to add variables to your data set based on existing data
+
+Here, we're going to practice these skills using data on fur seals collected by Mauricio Seguel: [insert info on seal data here!!!]
+
+*Write code to load the seal .csv files into R. How does R know where the file is located? How do you assign these csv's to objects?*
+*Then, we'll split these data into two data frames and re-merge them together.*
+
+```{r adding and deleting columns}
+
+# Load seal data 
+seal <- read_csv("~/Desktop/R_Bootcamp/data_furseal.csv")
+View(seal)
+
+# One thing missing right off the bat is a sample identifier column.
+# Animals are sampled repeatedly, as shown by the animal.id, n.capture, and date columns, but it's nice to have this information contained in a single place
+seal <- seal %>%
+  rowid_to_column("sample_id")
+
+# Now let's pretend that we wanted to split this data into two separate data frames. 
+# Maybe a collaborator is interested in the worm egg counts but not the histological parameters for each sample. 
+# We can accomplish this using the `select()` function to specify columns of interest. 
+# We can then export each data frame as a separate csv file.
+# Notice the quotes placed around column names that contain spaces (we'll fix this later!)
+seal_worms <- seal %>%
+  select(sample_id, animal.id, n.capture, sector, sex, bmi, treatment, `HW Burden`)
+
+colnames(seal_worms)
+write.csv(seal_worms, "~/Desktop/R_Bootcamp/seal_worms.csv")
+
+seal_histo <- seal %>%
+  select(sample_id, animal.id, n.capture, date, RBC, PCV, Hg, PT, WBC, Neut, Band, lymph, mac, eos, baso)
+
+# Alternatively, you can use `-` before column names to specify variables you want to remove instead of those you want to keep.
+
+colnames(seal_histo)
+write.csv(seal_histo, "~/Desktop/R_Bootcamp/seal_histo.csv")
+
+# What if we had originally obtained these data in these two subsets and wanted to combine them into a single data frame?
+seal <- left_join(seal_worms, seal_histo, by = c("sample_id", "animal.id", "n.capture")) # specify column(s) in common between data sets to join by
+
+seal # check that same number of rows, but now should be a greater number of columns
+str(seal) # explore the structure of the data frame
+
+```
+
+#### What if we want to create a new variable based on two existing ones?? introduce case_when() and paste somewhere
+
+
+## Data Cleaning
+
+Now let's familiarize ourseves more with these new data and see if there are any inconsistencies we need to fix. This can seem a bit tedious but is crucial to avoiding issues and errors down the road!
+
+It is always good practice to use a standard nomenclature for your columns names. Remember that R is sensitive to uppercase and some special characters. Spaces between letters and characters can be also problematic if we are not careful with them. Additionally, it is always good to look at the type of column you have and make sure that R is reading these in agreement with the class of variable they are (e.g. categorical variables as “character” or "factor", continuous variables as “numeric”).
+
+Common steps in data cleaning include:
+* Renaming columns to be unambiguous and follow a consistent format (avoid spaces!)
+* Checking for typos in data entry (e.g. inconsistent category labels, capitalization errors, etc.)
+* Looking for NA values to ensure they are properly interpreted by R (seemingly blank cells will sometimes actually contain spaces)
+* Changing columns to the correct class (e.g. numeric, factor)
+
+It is VERY IMPORTANT that you make these changes in R so that you have a record of them and they are reproducible by others!
+
+
+#number of columns coded as character. Are they correctly coded? Can you change them?
+#change the potentially problematic column names
+#correct values within some columns that are biologically impossible
+
+
+*Look for any mistakes in the seal data set and make a list of inconsistencies we'll need to correct:*
+  *1. Could we have any issues with the columns names?*
+  *2. Do the values of each column make sense?*
+
+*Remember you can include "comments" in your code by placing a "#" symbol before the text.*
+
+```{r editing columns and rows}
+
+# Various ways to explore data structure
+View(seal) # view data set
+colnames(seal) # how is R reading our column names
+str(data_furseal) # how R is reading the values in each column
+
+## Mistakes to correct:
+# Add underscores between words (rather than "." or " ")
+# Make all lowercase (easier to type) - other options, but be consistent!
+# Change column classes --> bmi = numeric, sector = character, capture_number = character, hw_burden = numeric
+# Replace impossible values (e.g. pups with "0" body mass index) with NA
+# Make male/female designations consistent
+# Make treatment column a factor with two levels (currently ivermectin, Ivermectin, NA, no treatment)
+
+# Change column names (and re-assign to original object)
+seal <- seal %>%
+  rename(animal_id = "animal.id",
+         capture_number = "n.capture",
+         hw_burden = "HW Burden",
+         neut = "Neut",
+         band = "Band",
+         hg = "Hg")
+
+str(seal) # let's see if these corrections worked as intended
+
+names(seal)[names(seal) == "animal.id"] <- "animal_id" # alternative option using base R
+
+# Now we will fix the column types (characters to numeric and viceversa)
+# One way we can do this is using the `mutate()` function in dplyr
+# Note that to convert a numeric to factor, need to first convert to a character
+seal <- seal %>%
+  mutate(bmi = as.numeric(bmi),
+         sector = as.character(sector),
+         capture_number = as.character(capture_number),
+         hw_burden = as.numeric(hw_burden))
+  
+seal$bmi <- as.numeric(seal$bmi) # alternative option using base R
+class(seal$bmi) = "numeric" # alternative option using base R
+
+str(seal) # check again to see if these corrections worked as intended
+
+# Now we can correct column values (e.g. capitalization typos and values that are known to be wrong). 
+# For example, it is biologically imposible for pups to have a body mass index of "0".
+# We can also clean up different factor labels for plotting (e.g. if seals weren't treated, they were in the "control" group)
+# We will clean up these errors using the `recode()`, `na_if()`, and `replace_na()` functions within `mutate()`.
+
+seal <- seal %>%
+  mutate(sex = recode(sex, "Femle" = "Female", "female" = "Female"),
+         bmi = na_if(bmi, "0"),
+         treatment = recode(treatment, "ivermectin" = "Ivermectin"),
+         treatment = replace_na(treatment, "Control")) 
+  
+# What if we want to re-order levels a factor? Levels will automatically be ordered alphabetically when plotting,
+# but lets say we want to always show our treated group before the control group. 
+# We can accomplish this by converting treatment from a character to a factor, and using the `fct_relevel()` function, 
+# where "Inf" means the specified level will be moved to the last position in the list.
+
+seal <- seal %>%
+  mutate(treatment = as.factor(treatment),
+         sex = as.factor(sex))
+
+levels(seal$treatment) # Control before Ivermectin
+
+seal <- seal %>%
+  mutate(treatment = fct_relevel(treatment, "Control", after = Inf))
+
+levels(seal$treatment) # Now Ivermectin before Control
+
+# Finally, let's check to make sure our corrections worked as intended
+# Does each factor (sex and treatment) now have the correct number of levels?
+str(seal)
+
+```
+
+
+
+
+
