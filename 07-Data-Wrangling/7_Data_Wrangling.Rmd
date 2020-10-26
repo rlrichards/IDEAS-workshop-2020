@@ -40,8 +40,6 @@ Sometimes, your data will be collected across different files or you'll need to 
 * There are multiple `join()` functions depending on the structure of the two data frames you are trying to merge - use `?join` to see them!
 * For example, `left_join()` will retain all rows from the left-hand data set and all columns from both the left- and right-hand data sets.
 
-##### You may also want to add variables to your data set based on existing data
-
 Here, we're going to practice these skills using data on fur seals collected by Mauricio Seguel: [insert info on seal data here!!!]
 
 *Write code to load the seal .csv files into R. How does R know where the file is located? How do you assign these csv's to objects?*
@@ -84,8 +82,6 @@ seal # check that same number of rows, but now should be a greater number of col
 str(seal) # explore the structure of the data frame
 
 ```
-
-#### What if we want to create a new variable based on two existing ones?? introduce case_when() and paste somewhere
 
 
 ## Data Cleaning
