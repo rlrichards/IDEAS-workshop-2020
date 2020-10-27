@@ -91,6 +91,13 @@ out2
 ###**Practice**: Create a function that will return the sum of 2 integers
 ```{r function15} 
 
+my.function2 <- function(a,b){
+  tmp <- a+b
+  return(tmp)
+}
+
+my.function2(3,4)
+
 ```
 
 ##Example 1b: Rounding  function
@@ -135,18 +142,18 @@ if (x < 9) print("x is less than nine")
 
 ```{r function14}
 
-#Isit <- function(x){
-# if (x == ??){
- #print("???!")
-# } else {
-# print("???")
-#}
-#}
+Isit <- function(x){
+  if (x == 1){
+    print("x is 1")
+  } else {
+    print("x is not 1")
+  }
+}
 
 
-#Isit(?)
+Isit(1)
 
-#Isit(?)
+Isit(0)
 
 ```
 
@@ -179,7 +186,16 @@ Hints:
 - so 2 %% 2 = 0; 5 %% 2 = 1
 
 ```{r for and if practice}
-
+a <- c()
+for( i in 1:10){
+  tmp <- i%%2 ==0
+  if(tmp == 0){
+    a[i] <- "even"
+  } else {
+    a[i] <- "odd"
+  }
+  
+}
 
 
 ```
@@ -224,6 +240,12 @@ sqrt(var(dat)/length(dat)) # standard error
 
 ```{r function12}
 
+stdError <- function(dat) {
+  stdDev <- sd(dat)
+  stdEr <- stdDev/sqrt(length(dat))
+  return(stdEr)
+}
+
 ```
 
 
@@ -242,6 +264,8 @@ apply(X, 2, sum)
 ###**Practice**: How do you calculate the sum of each row using apply?
 
 ```{r Row apply practice}
+
+apply(X, 1, sum)
 
 ```
 
