@@ -1,0 +1,20 @@
+---
+title: "7_Data_Wrangling"
+author: "Kate Sabey"
+date: "10/25/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Data Wrangling
+
+This module will cover:
+* Introduction to statistical modeling
+* Combining visualizations and statistical models
+
+One of the biggest advantages of R is that incorporates many powerful tools to perform the most current types of regression analyses as well as the more “classical” methods used in life sciences. In the field of disease ecology, given the many particularities of the type of experiments and data generated, there have been many recent developments to deal with common issues such as unbalanced data sets, repeated measures, large numbers of zeros, etc. If you see Journals such as “Methods in Ecology and Evolution”, “Journal of Animal Ecology (how to section)”, “Functional Ecology” and “The R Journal” for instance, you will see that many current publications propose new methods to fit and interpret statistical models that deal with some of these issues (for some examples see the “recommended bibliography” section). Since R is a community based tool, almost all these new developments include the corresponding R package that fit models or calculate parameters according to the methods proposed in the manuscripts. As in any other science field, many new methodologies proposed will not necessarily apply to our needs or will not be widely implemented, but keep in mind that R is constantly growing and improving thanks to many researchers that try to find better ways to solve problems in their field of research. 
+
+It is outside the scope of this short course to give a detailed explanation on statistical modeling and linear regression. In this section we just will show how R can be used to perform these types of tasks and general common features, with the intention that you will have some context to become more familiar once studying the many online and published resources on this subject. 

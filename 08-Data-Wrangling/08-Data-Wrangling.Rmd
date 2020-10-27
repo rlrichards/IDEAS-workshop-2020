@@ -46,6 +46,7 @@ Here, we're going to practice these skills using data on fur seals collected by 
 *Then, we'll split these data into two data frames and re-merge them together.*
 
 ```{r adding and deleting columns}
+library(readr) # Load the package containing the read_csv function
 
 # Load seal data 
 seal <- read_csv("~/Desktop/R_Bootcamp/data_furseal.csv")
@@ -185,7 +186,11 @@ str(seal)
 
 ```
 
+## Write out the cleaned dataset
+
+```{r Write our cleaned dataset}
 
 
+write.csv(seal, "IDEAS-workshop-2020/data/clean/cleanedSealData.csv")
 
 
