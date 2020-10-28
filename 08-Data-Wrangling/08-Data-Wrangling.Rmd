@@ -47,9 +47,14 @@ Here, we're going to practice these skills using data on fur seals collected by 
 
 ```{r adding and deleting columns}
 library(readr) # Load the package containing the read_csv function
+library(tidyr) 
+library(dplyr)
+library(tibble)
+library(forcats)
+library(here) # Set your working directory to the project directory
 
 # Load seal data 
-seal <- read_csv("~/Desktop/R_Bootcamp/data_furseal.csv")
+seal <- read_csv(here("data_furseal.csv"))
 View(seal)
 
 # One thing missing right off the bat is a sample identifier column.
@@ -66,7 +71,7 @@ seal_worms <- seal %>%
   select(sample_id, animal.id, n.capture, sector, sex, bmi, treatment, `HW Burden`)
 
 colnames(seal_worms)
-write.csv(seal_worms, "~/Desktop/R_Bootcamp/seal_worms.csv")
+write.csv(seal_worms, here("seal_worms.csv"))
 
 seal_histo <- seal %>%
   select(sample_id, animal.id, n.capture, date, RBC, PCV, Hg, PT, WBC, Neut, Band, lymph, mac, eos, baso)
@@ -74,7 +79,7 @@ seal_histo <- seal %>%
 # Alternatively, you can use `-` before column names to specify variables you want to remove instead of those you want to keep.
 
 colnames(seal_histo)
-write.csv(seal_histo, "~/Desktop/R_Bootcamp/seal_histo.csv")
+write.csv(seal_histo, here("seal_histo.csv"))
 
 # What if we had originally obtained these data in these two subsets and wanted to combine them into a single data frame?
 seal <- left_join(seal_worms, seal_histo, by = c("sample_id", "animal.id", "n.capture")) # specify column(s) in common between data sets to join by
@@ -116,7 +121,7 @@ It is VERY IMPORTANT that you make these changes in R so that you have a record 
 # Various ways to explore data structure
 View(seal) # view data set
 colnames(seal) # how is R reading our column names
-str(data_furseal) # how R is reading the values in each column
+str(seal) # how R is reading the values in each column
 
 ## Mistakes to correct:
 # Add underscores between words (rather than "." or " ")
@@ -191,6 +196,7 @@ str(seal)
 ```{r Write our cleaned dataset}
 
 
-write.csv(seal, "IDEAS-workshop-2020/data/clean/cleanedSealData.csv")
+write.csv(seal, here("cleanedSealData.csv"))
 
 
+```
