@@ -205,18 +205,18 @@ ggplot(data = weather_jan, aes(x = time_hour, y = temp)) +
 
 ## Exploring other "geom"s
 
-In this third part you will work in a small group to produce a new plot using the midwest dataset
-Each group will learn about a function or set of functions in ggplot2 and use one or multiple
-of those functions to portray something interesting about the dataset. Use the ? function as well as
-google to learn about your function(s). Once you understand what type of plots your function allows
-return to the midwest data and find a relationship that you want to display. A good place to start
-is with View(midwest) or str(midwest) to see what type of data are available in the dataset. 
+In this third part, you will work in a small group to produce a new plot using the midwest dataset or any other data set we've introduced so far.
 
-Hint: use the ggplot cheatsheet to understand what kind of data can be used in each plot type.
+Each group will learn about a new ggplot geometry or set of functions in ggplot2 and use them to portray something interesting about the dataset.
+Use the ? function as well as google to learn about your function(s).
+
+You can start by using the ggplot cheatsheet to understand what kind of data is needed for each plot type: https://rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf 
+
+Once you understand what type of data your functions allows, return to the one of the data sets and find a relationship that you want to display. 
+Remember, a good place to start is with View(midwest) or str(midwest) to see what type of data are available. 
 
 At the end of this exercise I'll ask that you send the code that produces your plot to me
-(kate.sabey@uga.edu). I'll display the code and plot up front and each group will get
-3 minutes to explain their plot, and more importantly how they created it, to the rest of the class
+(kate.sabey@uga.edu). I'll display the code and plot and each group will take ~3 minutes to explain their plot and how they created it, to the rest of the class!
 
 ```{r geom group exercise}
 
