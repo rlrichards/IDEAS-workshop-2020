@@ -40,7 +40,9 @@ Sometimes, your data will be collected across different files or you'll need to 
 * There are multiple `join()` functions depending on the structure of the two data frames you are trying to merge - use `?join` to see them!
 * For example, `left_join()` will retain all rows from the left-hand data set and all columns from both the left- and right-hand data sets.
 
-Here, we're going to practice these skills using data on fur seals collected by Mauricio Seguel: [insert info on seal data here!!!]
+Here, we're going to practice these skills using data on fur seals collected by Mauricio Seguel:
+
+This data was collected between December 2016 and March 2017 in the Northern Chilean Patagonia (Guafo Island). The study consisted of capturing South American fur seal pups (Arctocephalus australis) in order to assess their health status and study the progression of hookworm disease. This condition is caused by a strongyle nematode (Uncinaria sp.). Approximately 200 pups were captured and at least 50% of them were recaptured 2 to 4 times. Some pups were then given an anthelmintic treatent. The capture procedures included  recording of relevant identification traits such as sex, rookery sector, and the collection of feces and blood to perform coprological and hematological assays in the laboratory. 
 
 *Write code to load the seal .csv files into R. How does R know where the file is located? How do you assign these csv's to objects?*
 *Then, we'll split these data into two data frames and re-merge them together.*
@@ -73,16 +75,16 @@ seal_worms <- seal %>%
 colnames(seal_worms)
 write.csv(seal_worms, here("seal_worms.csv"))
 
-seal_histo <- seal %>%
+seal_hematology <- seal %>%
   select(sample_id, animal.id, n.capture, date, RBC, PCV, Hg, PT, WBC, Neut, Band, lymph, mac, eos, baso)
 
 # Alternatively, you can use `-` before column names to specify variables you want to remove instead of those you want to keep.
 
-colnames(seal_histo)
-write.csv(seal_histo, here("seal_histo.csv"))
+colnames(seal_hematology)
+write.csv(seal_hematology, here("seal_hematology.csv"))
 
 # What if we had originally obtained these data in these two subsets and wanted to combine them into a single data frame?
-seal <- left_join(seal_worms, seal_histo, by = c("sample_id", "animal.id", "n.capture")) # specify column(s) in common between data sets to join by
+seal <- left_join(seal_worms, seal_hematology, by = c("sample_id", "animal.id", "n.capture")) # specify column(s) in common between data sets to join by
 
 seal # check that same number of rows, but now should be a greater number of columns
 str(seal) # explore the structure of the data frame
