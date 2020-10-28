@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Data Wrangling
+## Statistical models
 
 This module will cover:
 * Introduction to statistical modeling
@@ -18,3 +18,77 @@ This module will cover:
 One of the biggest advantages of R is that incorporates many powerful tools to perform the most current types of regression analyses as well as the more “classical” methods used in life sciences. In the field of disease ecology, given the many particularities of the type of experiments and data generated, there have been many recent developments to deal with common issues such as unbalanced data sets, repeated measures, large numbers of zeros, etc. If you see Journals such as “Methods in Ecology and Evolution”, “Journal of Animal Ecology (how to section)”, “Functional Ecology” and “The R Journal” for instance, you will see that many current publications propose new methods to fit and interpret statistical models that deal with some of these issues (for some examples see the “recommended bibliography” section). Since R is a community based tool, almost all these new developments include the corresponding R package that fit models or calculate parameters according to the methods proposed in the manuscripts. As in any other science field, many new methodologies proposed will not necessarily apply to our needs or will not be widely implemented, but keep in mind that R is constantly growing and improving thanks to many researchers that try to find better ways to solve problems in their field of research. 
 
 It is outside the scope of this short course to give a detailed explanation on statistical modeling and linear regression. In this section we just will show how R can be used to perform these types of tasks and general common features, with the intention that you will have some context to become more familiar once studying the many online and published resources on this subject. 
+
+### Model components
+
+In most R packages linear regression models are fitted by specifying the function or type of model to fit (f). Within the function we include the model response variable (y) as a function (~) of the predictor (x) or multiple predictors and their interactions. In general it will look something like this:
+
+` M1 <- f(y~x) `
+
+Many additional components can be specified within the model depending on the model function or package (e.g. data distribution structures).
+
+We are going to use the furseal parasite data that you cleaned previously to fit a few linear models.
+
+When these data were collected, one of the main questions was to determine which related health parameters were a good "predictor" of parasite burden. So, we will fit regression models using parasite burden as a response and some health parameters as predictors.
+
+####Exercise: Fit a linear model!
+Replace x, y, and z in the below model function with the names of predictor variables, name of the response variable, and name of the data frame respectively. Then fit the model
+
+```{r Linear model}
+
+M1 <- lm(y~x, data = z) # Fit the model
+
+summary(M1) # Print a summary of the model output
+
+anova(M1) # Print an anova table for the fitted model
+
+plot(M1)  # Plot 4 standard diagnostic plots to assess model fit
+
+```
+
+BUT a simple linear model assumes that the errors are normally distributed. Our parasite data are non-continuous and aggregated so are very unlikely to be fit by this normal model assumption.
+
+We'll use a generalized linear model instead to specify a different error distribution. There are MANY packages that let us do this (including the base R `stats` package) but we'll use a very flexible package called `glmmTMB`
+
+####Exercise: Fit a generalized linear model
+
+Set up the glm below to do the same analysis that you do with an lm above.
+
+Compare the results of the two models.
+```{r GLM}
+library(glmmTMB)
+
+
+M2 <- glmmTMB(y~x,data =z) # Fit the glm
+
+summary(M2) # Print the model output of the glm
+summary(M1) # Print the model output of the lm from above
+
+```
+
+The real flexibility of a glm comes from being able to specify an alternative to the normal distribution.
+
+Here we'll use the `family` argument to specify a poisson distribution because it is a non-continuous count distribution likely to better fit our data.
+
+```{r GLM}
+M3 <- glmmTMB(y~x,data =z, family = poisson)
+
+summary(M3) # Plot the output of the poisson glm
+summary(M2) # Plot the output of the normal glm from above
+
+```
+
+But how do we know which model is right? One way to compare models with different distribution specifications is by comparing model diagnostic plots. While we looked at these for `lm` using the `plot` function we'll use another package, `DHARMa` to do this for the more sophisticated glms from `glmmTMB`.
+
+```{r DHARMa comparison}
+library(DHARMa)
+
+simulateResiduals(M2, plot=T) # Generate diagnostic plots for the normal glm
+
+simulateResiduals(M3, plot=T) # Generate diagnostic plots for the poisson glm
+
+```
+
+
+
+
