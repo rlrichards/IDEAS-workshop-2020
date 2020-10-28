@@ -31,6 +31,7 @@ We are going to use the furseal parasite data that you cleaned previously to fit
 
 ```{r load data}
 library(here)
+library(readr)
 seal <- read_csv(here("cleanedSealData.csv"))
 
 ```
@@ -38,19 +39,15 @@ seal <- read_csv(here("cleanedSealData.csv"))
 When these data were collected, one of the main questions was to determine which related health parameters were a good "predictor" of parasite burden. But first we want to know whether our Ivermectin treatment was effective in decreasing heartworm burdens in the seals. We also suspect that the effectiveness of the Ivermectin treatment may vary according to seal bmi. 
 
 ####Exercise: Fit a linear model!
-Replace x, y, and z in the below model function with the names of predictor variables, name of the response variable, and name of the data frame respectively. Then fit the model.
-
-If you want to include multiple predictor variables you can separate them with a `+`. If you think the different predictors may have an interaction effect, separate them with a `*`.
+Replace x, y, and z in the below model function with the names of predictor variables, name of the response variable, and name of the data frame respectively. Then fit the model
 
 ```{r Linear model}
 
-M1 <- lm(y~x, data = z) # Fit the model
+M1 <- lm(hw_burden~treatment, data = seal) # Fit the model
 
 summary(M1) # Print a summary of the model output
 
 anova(M1) # Print an anova table for the fitted model
-
-plot(M1)  # Plot 4 standard diagnostic plots to assess model fit
 
 ```
 
@@ -67,7 +64,7 @@ Compare the results of the two models.
 library(glmmTMB)
 
 
-M2 <- glmmTMB(y~x,data =z) # Fit the glm
+M2 <- glmmTMB(hw_burden~treatment,data =seal) # Fit the glm
 
 summary(M2) # Print the model output of the glm
 summary(M1) # Print the model output of the lm from above
@@ -79,7 +76,8 @@ The real flexibility of a glm comes from being able to specify an alternative to
 Here we'll use the `family` argument to specify a poisson distribution because it is a non-continuous count distribution likely to better fit our data.
 
 ```{r GLM}
-M3 <- glmmTMB(y~x,data =z, family = poisson)
+
+M3 <- glmmTMB(hw_burden~treatment*bmi,data =seal, family = poisson)
 
 summary(M3) # Plot the output of the poisson glm
 summary(M2) # Plot the output of the normal glm from above
@@ -109,6 +107,8 @@ simulateResiduals(M4, plot=T) # Generate diagnostic plots for the your family gl
 summary(M4)
 
 ```
+
+
 
 ###Other types of tests
 
