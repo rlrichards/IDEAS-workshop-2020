@@ -21,8 +21,8 @@ Finally, I'll show off a couple of other useful visualization tools in `ggplot2`
 ```{r scatterplot - ggplot2 edition}
 
 # load midwest data from the ggplot2 package
-library(ggplot2)
-data("midwest", package="ggplot2")
+library(tidyverse)
+data("midwest", package = "ggplot2")
 
 # Remember that each ggplot object has 3 main components:
 # 1. The first argument in the function is the dataframe
@@ -103,7 +103,6 @@ For this excercise we will use the weather data set from the `nycflights13` pack
 *First load and take a look at the `weather` data frame to see what kind of data is available*
 *Remember you will need to use the `install.packages()` function to install this package if you haven't already.*
 
-
 ```{r plotting time series data in ggplot2}
 
 library(nycflights13) # load package
@@ -111,7 +110,10 @@ head(weather)
 ?weather # gives detail as to what the data in each column represents
 
 # As you can tell, this data set contains an awful lot of data, so lets subset it to focus on dates in the first half of Jan 2013
-weather_jan <- subset(weather, day < 15 & month == 1 & year == 2013)
+# We're also going to go ahead and convert the "origins" column from a character to a factor to help with downstream plotting functions
+weather_jan <- weather %>%
+  filter(day < 15 & month == 1 & year == 2013) %>%
+  mutate(origin = as.factor(origin))
 
 # Now we can create a line graph plotting total population over time
 # Notice that this code contains the three arguments needed for every ggplot object
@@ -134,8 +136,9 @@ ggplot(data = weather_jan, aes(x = time_hour, y = temp)) +
        y = "Temperature")
 
 # How could we change the order of the airports in the legend?
-# One way tis to reorder the levels of the corresponding factor, then re-plot:
-weather_jan$origin <- factor(weather_jan$origin, levels = c("JFK", "LGA", "EWR"))
+# One way is to reorder the levels of the corresponding factor, then re-plot. We can do this using the `fct_relevel()` function:
+weather_jan <- weather_jan %>%
+  mutate(origin = fct_relevel(origin, levels = c("JFK", "LGA", "EWR")))
 
 ggplot(data = weather_jan, aes(x = time_hour, y = temp)) + 
   geom_line(aes(color = origin), size = 2) +
@@ -205,7 +208,7 @@ ggplot(data = weather_jan, aes(x = time_hour, y = temp)) +
 
 ## Exploring other "geom"s
 
-In this third part, you will work in a small group to produce a new plot using the midwest dataset or any other data set we've introduced so far.
+In the third part of this module, you will work in a small group to produce a new plot using the midwest dataset or any other data set we've introduced so far.
 
 Each group will learn about a new ggplot geometry or set of functions in ggplot2 and use them to portray something interesting about the dataset.
 Use the ? function as well as google to learn about your function(s).
@@ -307,8 +310,6 @@ ggplot(data = weather_jan, aes(x = time_hour, y = temp)) +
 
 ## Interactive plots
 
-plotly: easy interactive plots with ggplot
-
 The `plotly` package is an add on to ggplot2 for generating quick interactive plots. It has a few limitations (eg. the legends or other features are often poorly displayed), but the interactive feature maybe useful for data exploration during an in-person meeting.
 
 ```{r interactive plots}
@@ -316,7 +317,7 @@ The `plotly` package is an add on to ggplot2 for generating quick interactive pl
 install.packages("plotly")
 library(plotly)
 
-# note that ggplots can be assigned to R objects
+# Note that ggplots can be assigned to R objects
 p <- plot_ly(data = midwest, x = ~area, y = ~poptotal, type="scatter", mode="markers")
 
 p # plot the interactive graphic
@@ -337,7 +338,7 @@ Just like other data visualizations, mapping in R can be done a few different wa
 * rgdal
 The last 3 (raster, sp, and rgdal) are also useful for analyzing spatial data.
 
-*But we can actually use our old friend ggplot to make some pretty nice maps.*
+But we can actually use our old friend ggplot to make some pretty nice maps.
 
 ```{r plotting maps}
 
@@ -380,6 +381,7 @@ Though there are several ways to concatenate plots to generate such images, I li
 # First install and load the cowplot package if you haven't already
 install.packages("cowplot")
 library(cowplot)
+library(here)
 
 # Like other features in R, ggplots can be assigned to objects
 # Let's assign two of our plots from above into separate objects
@@ -420,7 +422,7 @@ weather_plots
 # Note that this function produces higher resolution ouptut than the "Export" dropdown of the "Plots" viewer panel in R studio.
 # You can also use this function to save eps (Adobe illustrator) or tiff files according to specific journal specifications.
 
-ggsave("~/Desktop/weather_plots.png", device = "png", width = 8, height = 4, units = "in", dpi = 300)
+ggsave(here("weather_plots.png"), device = "png", width = 8, height = 4, units = "in", dpi = 300)
 
 ```
 
