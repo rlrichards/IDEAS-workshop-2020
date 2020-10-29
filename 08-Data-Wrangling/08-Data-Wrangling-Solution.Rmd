@@ -1,5 +1,5 @@
 ---
-title: "08-Data-Wrangling"
+title: "08-Data-Wrangling-Solution"
 author: "Kate Sabey"
 date: "10/25/2020"
 output: html_document
@@ -57,13 +57,13 @@ library(forcats)
 library(here) # Set your working directory to the project directory
 
 # Load seal data 
-seal <- read_csv(here())
+seal <- read_csv(here("data_furseal.csv"))
 View(seal)
 
 # One thing missing right off the bat is a sample identifier column.
 # Animals are sampled repeatedly, as shown by the animal.id, n.capture, and date columns, but it's nice to have this information contained in a single place
 seal <- seal %>%
-  rowid_to_column()
+  rowid_to_column("sample_id")
 
 # Now let's pretend that we wanted to split this data into two separate data frames. 
 # Maybe a collaborator is interested in the worm egg counts but not the histological parameters for each sample. 
@@ -80,10 +80,13 @@ write.csv(seal_worms, here("seal_worms.csv"))
 # Modify the code below to repeat for the hematology variables (RBC, PCV, Hg, PT, WBC, Neut, Band, lymph, mac, eos, baso)
 # Then export the resulting file as above
 seal_hematology <- seal %>%
-  select(sample_id, animal.id, n.capture, date, ...)
+  select(sample_id, animal.id, n.capture, date, RBC, PCV, Hg, PT, WBC, Neut, Band, lymph, mac, eos, baso)
+
+colnames(seal_hematology)
+write.csv(seal_hematology, here("seal_hematology.csv"))
 
 # What if we had originally obtained these data in these two subsets and wanted to combine them into a single data frame?
-seal <- left_join(seal_worms, seal_hematology, by = c()) # specify column(s) in common between data sets to join by
+seal <- left_join(seal_worms, seal_hematology, by = c("sample_id", "animal.id", "n.capture")) # specify column(s) in common between data sets to join by
 
 seal # check that same number of rows, but now should be a greater number of columns
 str(seal) # explore the structure of the data frame
@@ -120,23 +123,37 @@ colnames(seal) # how is R reading our column names
 str(seal) # how R is reading the values in each column
 
 ## Mistakes to correct:
-# 
-# 
-# 
-#
+# Add underscores between words (rather than "." or " ")
+# Make all lowercase (easier to type) - other options, but be consistent!
+# Change column classes --> bmi = numeric, sector = character, capture_number = character, hw_burden = numeric
+# Replace impossible values (e.g. pups with "0" body mass index) with NA
+# Make male/female designations consistent
+# Make treatment column a factor with two levels (currently ivermectin, Ivermectin, NA, no treatment)
 
 # Change column names (and re-assign to original object)
-# Add to the code below to make all the necessary changes!
 seal <- seal %>%
-  rename(animal_id = "animal.id")
+  rename(animal_id = "animal.id",
+         capture_number = "n.capture",
+         hw_burden = "HW Burden",
+         neut = "Neut",
+         band = "Band",
+         hg = "Hg")
 
 str(seal) # let's see if these corrections worked as intended
+
+names(seal)[names(seal) == "animal.id"] <- "animal_id" # alternative option using base R
 
 # Now we will fix the column types (characters to numeric and viceversa)
 # One way we can do this is using the `mutate()` function in dplyr
 seal <- seal %>%
-  mutate(bmi = as.numeric(bmi))
+  mutate(bmi = as.numeric(bmi),
+         sector = as.character(sector),
+         capture_number = as.character(capture_number),
+         hw_burden = as.numeric(hw_burden))
   
+seal$bmi <- as.numeric(seal$bmi) # alternative option using base R
+class(seal$bmi) = "numeric" # alternative option using base R
+
 str(seal) # check again to see if these corrections worked as intended
 
 # Now we can correct column values (e.g. capitalization typos and values that are known to be wrong). 
@@ -145,10 +162,10 @@ str(seal) # check again to see if these corrections worked as intended
 # We will clean up these errors using the `recode()`, `na_if()`, and `replace_na()` functions within `mutate()`.
 
 seal <- seal %>%
-  mutate(sex = recode(),
-         bmi = na_if(),
-         treatment = recode(),
-         treatment = replace_na()) 
+  mutate(sex = recode(sex, "Femle" = "Female", "female" = "Female"),
+         bmi = na_if(bmi, "0"),
+         treatment = recode(treatment, "ivermectin" = "Ivermectin"),
+         treatment = replace_na(treatment, "Control")) 
   
 # What if we want to re-order levels a factor? Levels will automatically be ordered alphabetically when plotting,
 # but lets say we want to always show our treated group before the control group. 
