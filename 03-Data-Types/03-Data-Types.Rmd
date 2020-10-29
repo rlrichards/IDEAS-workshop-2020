@@ -1,0 +1,304 @@
+---
+title: "03-Data-Types"
+author: "Kate Sabey"
+date: "10/29/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This module will cover:
+* Assigning objects
+* Data structure and syntax
+* Troubleshooting through Rstudio
+* Data subsetting
+
+## R Objects
+
+Everything in `R` is an object. `R` doesn’t let users directly access the computer’s memory, instead users access many different specialized data structures. You can think of this design as a filing cabinet. One drawer contains textbooks, another pictures, another data tables, and so on. In this analogy, each drawer is a different object class. If we look in the textbook drawer, each book or object has a similar structure (front cover, title page, table of contents, etc.), but just like each book has a unique title, `R` objects have unique user-assigned names. The information in each object can be retrieved by calling the object’s name.
+
+Objects in R are often assigned a name by using an arrow `<-` 
+
+```{r assigning objects}
+
+myname <- "Odum" # this line assigns "Odum" to an object "myname"
+myname # print the content of "myname" object by running it in the console
+
+# Note that this means you can aslo re-assign new information to the same object name
+myname <- "Ecology"
+myname # now we have over-written the original content of the "myname" object
+
+```
+
+## Data types
+
+One of the first concepts we will need to understand how R organizes information and what types of information we can use. 
+
+`R` has 5 basic (“atomic”) classes:
+* logical (TRUE, FALSE)
+* character (“blue”, “purple”)
+* integer (1,2,3) each number must be followed by L
+* numeric (1,1.5,2)
+* complex (i)
+
+We can use a few base `R` functions to get information about objects. Some helpful functions include:
+* class()
+* typeof()
+* length()
+* attributes()
+* str()
+
+*Verify the class of "myname" and determine its length. Remember you can type `?` before any function to pull up its documentation and learn more about it.*
+
+```{r data classes}
+
+# What is the class of myname?
+# Based on the descriptions above, we can guess that is should be a character - let's use the `class()` function to double check. 
+
+?typeof() #look up documentation for typeof()
+typeof(myname) #return the object type of "myname"
+
+# How long is the myname object?
+?length()
+length(myname) # This object has a length of one. Why?
+
+# Now let’s make a numeric class object with a length greater than 1
+y <- c(1:10) # colon indicates '1 to 10' 
+typeof(y)
+length(y)
+
+# Concept Check: How could we make myname longer than 1?
+myname_2 <- c("Odum", "Ecology")
+length(myname_2)
+
+```
+  
+  
+## Data Structure
+
+These 5 object classes can then be combined to create many different types of data structures. Common data structures include:
+* vector
+* matrix
+* list
+* factor
+* data frame
+
+These data structures can consist of either a single class or a mixture of data types. Let’s look at examples of each type.
+
+# Vectors
+
+Vectors are perhaps the most common data structure. Vectors are a series of elements of character, logical, or numeric/integer class.
+We can concatenate objects into a vector using `c()`
+
+```{r creating vectors}
+
+# You can create vectors of several different classes of elements
+character_vector <- c("a", "b", "c")
+numeric_vector <- c(1, 10, 49)
+boolean_vector <- c("TRUE", "FALSE", "TRUE")
+
+# You can also create vectors using handy functions such as `rep()` and `seq()`
+vec1 <- rep(1:4, 2)
+vec2 <- rep(1:4, each = 2) 
+vec3 <- seq(1, 15, by = 2)
+
+# You can also use operators to create other vectors
+# Explore the difference between vec4 and vec5. How was the addition done in both cases?
+vec4 <- vec1 + vec2 + vec3
+vec5 <- sum(vec1, vec2, vec3)
+```
+
+There are many different ways to manipulate vectors. These methods will come in handy when exploring and plotting data. 
+Accessing specific elements in the vector can be done based on the value of the element or the element location in the string.
+
+*Practice: Determine how each command accesses particular elements of each vector. Complete the comments where needed!*
+
+```{r manipulating vectors}
+
+vec4[1] # returns the first element of "vec4"
+
+vec4[1:3] # what happened here?
+
+vec4[c(1,2,4)] # how about here?
+
+vec6 <- c(1:20) # creating a new vector called "vec6" - How long is it?
+x <- c(3, 5, 12) # creating a new vector called "x" - How long is it?
+
+vec6[x] # returns the elements of vec6 that coicinde with vector x
+
+vec6[-x] # what happened here?
+
+vec7 <- c(1:5,2,2,2,2,2) # creating a new vector called "vec7"
+
+vec7[vec7 > 4] # returns the elements of "vec7" that are bigger than 4
+
+vec7[vec7 < 4] # what happened here?
+
+which(vec7 < 4) # returns positions of elements in vector that meet specifed criteria
+
+which(vec7 == 2) # what happened here?
+```
+
+# Matrices
+
+Matrices are a special type of collections of vectors. The data is organized into columns and rows giving the matrix dimensions. 
+There are many ways to make a matrix, but the default is to fill column-wise.
+
+```{r creating matrices}
+
+# One way to create a matrix is to use the `matrix()` function to manually specify the row names, column names, and data 
+rnames <- c("R1", "R2")
+cnames <- c("C1", "C2")
+
+m <- matrix(data = NA, nrow = 2, ncol = 2, byrow=TRUE, dimnames = list(rnames, cnames))
+m # what does our matrix look like?
+
+# Practice: Add more rows and columns to the matrix and fill it with 1 (one's) and change the names of the rows and columns
+rnames <- c("R1", "R2", "R3")
+cnames <- c("C1", "C2", "C3")
+m <- matrix(data = 1, nrow = 3, ncol = 3, byrow = TRUE, dimnames = list(rnames, cnames))
+m # now what does our matrix look like?
+
+# Another way to build a matrix is to combine existing vectors by rows (`rbind`) or columns (`cbind`)
+m1 <- rbind(vec1,vec2)
+m2 <- cbind(vec2,vec3,vec4)
+
+m1 # how were these vectors arranged together?
+m2 # how about now?
+```
+
+Just like vectors, we can also extract or subset information from particular parts of a matrix.
+
+```{manipulating vectors}
+
+# A common way of subsetting values from a matrix is using bracket notation. 
+# Note that, unlike vectors which are linear, here we use two values for subsetting - one for each dimension of the matrix
+# Bracket notation follows the format: [row number, column number]
+
+m1[1,] # returns all elements in first row of m1
+m1[,1] # returns all elements in first column of m1
+
+# Practice: write the command that will return that values described in the following comments.
+
+# All elements in second row of m2
+m2[2,]
+
+# The value in the first row and third column of m2
+m2[1,3]
+
+# The elements in the bottom 2 rows, and the second and third column of m2
+m2[7:8,2:3]
+```
+
+# Lists
+
+Lists are really containers for holding series of vectors and matrices. They can hold different data classes in each entry of the list, including lists themselves, meaning you can even make lists of lists. Therefore, lists can be considered a recursive vector.
+
+Lists especially come in handy when you are storing a series of similar data sets and need to perform the same function on each. We'll explore this idea in greater detail when we practice using loops, but for now let's explore the properties of lists!
+
+```{r creating and manipulating lists}
+
+# Make a list by specifying each element separated by columns
+w <- list(name = "Odum", mynumbers = vec1, mymatrix = m, age = 5.3)
+primes <- list(2, 3, 4:5, 6:7, 8:11, 12:13, 14:17, 18:19, 20:23)
+
+# Determine the structure of w 
+w
+str(w)
+
+# Subsetting lists - to access each component of a list, use double brackets `[[element #]]`
+w[[2]] # returns second element of list
+
+w[[2]][1] # what is this? How is it different than last command? 
+
+# Check the class of the 3rd entry of the "w" list
+class(w[[3]])
+
+# Determine the structure of the 8th element of the "primes" list
+str(primes[[8]])
+
+```
+
+# Factors
+
+Factors are used for ordered (e.g. low, medium, high) or unordered (e.g. blue, red, green) categorical data, represented as either characteris or numerics. This data type is important for modeling and plotting work. Factors can only contain pre-defined values and are how we can add labels to integers. For example, if sampling sites are labeled as numbers (e.g. sites 1, 2, 3), we can use factors to tell `R` that these values are actually categorical rather than continuous.
+
+```{r using factors}
+
+# Create a factor with three "levels"
+dat <- c("low", "med", "high")
+
+# Check if it is a factor (2 different ways to check - using either the `class()` or `is.factor()` function)
+class(dat)
+print(is.factor(dat)) # nope! 
+
+# Now convert the vector into a factor
+dat <- factor(dat)
+class(dat) # yep, now a factor!
+
+# Practice: make the following "hues" vector into a factor
+hues <- c(rep("blue",20), rep("red", 30)) 
+
+# Make "hues" a factor
+hues <- factor(hues)
+
+# Summarize hues - returns how many entries correspond to each level of the factor
+summary(hues)
+
+```
+
+# Data Frames
+
+Data frames are the most common way we organize ecological data. They have the organization of a matrix but the flexibility of lists in that each column can be a different data class. This means for a single observation or row, we can include categorical, numeric, and factorial information about that observation in various columns.
+
+Useful base R functions for exploring data frames:
+* `View()` - see entire data frame
+* `head()` - see first 6 rows
+* `tail()` - see last 6 rows
+* `dim()` - see dimensions
+* `nrow()` - number of rows
+* `ncol()` - number of columns
+* `str()` - structure of each column
+* `names()` - will list the names attribute for a data frame (or any object really), which gives the column names.
+
+However, as we saw in the previous section, the `R` community lead by Garrett Grolemund and Hadley Wickham has developed `tidyverse` work flows that are more efficient for common data science manipulations. Check out the Tidyverse and "R for Data Science" and "statmethods" for more information.
+
+```{r creating and manipulating data frames}
+
+# Creating a data frame from a series of vectors
+n = c(2, 3, 5) 
+s = c("aa", "bb", "cc") 
+b = c(TRUE, FALSE, TRUE) 
+
+df = data.frame(n, s, b)
+ 
+colnames(df) <- c("ID","Code","Passed") # change column names
+colnames(df)
+
+# Like with the matrix we can subset a data frame using bracket subsetting...
+
+df[,1] # subsetting a column
+df[1,] # subsetting a row
+
+# ...or we can also use the `$` symbol for subsetting by a known column name
+df$ID
+```
+
+
+# Exercise! (Time-Permitting)
+
+Now you'll practice creating a data set with 3 columns and 10 rows of numeric variables (any numbers). Give the columns the names “A”,”B” and “C”. Then convert your data set into a data frame and visualize it. Then try subsetting certain columns and rows.
+
+I got you started, but remember to add comments that describe what each line of code does!
+
+```{r exercise chunk}
+
+# create data frame with 3 columns and 10 rows
+
+
+```
+
