@@ -47,7 +47,7 @@ This data was collected between December 2016 and March 2017 in the Northern Chi
 *Write code to load the seal .csv files into R. How does R know where the file is located? How do you assign these csv's to objects?*
 *Then, we'll split these data into two data frames and re-merge them together.*
 
-```{r adding and deleting columns}
+```{r splitting and merging data}
 
 library(readr) # Load the package containing the read_csv function
 library(tidyr) 
@@ -188,6 +188,42 @@ levels(seal$treatment) # Now Ivermectin before Control
 str(seal)
 
 ```
+
+
+## Adding Variables
+
+Before we get to visualization and analysis, we may want to add new variables to our data frame based on the raw data values we collected from the field.
+
+For example, we can:
+* Combine existing columns using the `paste()` function
+* Gnerate new, conditional variables from an exisitng column using the `case_when()` function
+
+```{r adding columns}
+
+# Let's make a new variable that lists both the sex of each seal and whether or not they were treated for hookworms as a single variable
+seal <- seal %>%
+  mutate(sex_treatment = paste(sex, treatment, sep = "_")) # use the sep argument to specify how you would like terms to be pasted together 
+
+seal$sex_treatment # check to see if the new variable looks as you intended
+
+# How would you remake this column, but with treatment group before sex? and with a period separating values rather than an underscore?
+seal <- seal %>%
+  mutate(sex_treatment = paste(treatment, sex, sep = ".")) # use the sep argument to specify how you would like terms to be pasted together 
+
+# What if we wanted to bin our continuous hematology variables into categories (e.g. based on quantiles)?
+quantile(seal$lymph, na.rm = T)
+
+seal <- seal %>%
+  mutate(lymph_bins = case_when(lymph >= 0 & lymph <= 2457 ~ "first",
+                                lymph >= 2458 & lymph <= 3449.25 ~ "second",
+                                lymph >= 3449.26 & lymph <= 4953.60 ~ "third",
+                                lymph >= 4953.61 & lymph <= 22169.70 ~ "fourth",
+                                TRUE ~ "NA"))
+
+seal$lymph_bins # check to see if the new variable looks as you intended
+
+```
+
 
 ## Export cleaned dataset
 
