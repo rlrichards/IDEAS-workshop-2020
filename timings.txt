@@ -6,3 +6,12 @@
 	For loop practice 5-7 minutes
 	Std error function 3 minutes
 	Apply practice 3 minutes
+06 - Base R Graphics ~ 50 minutes
+	Intro and first chunk - 5min
+	Diagnosing issues with plot - 1 min write 3 min share
+	Plot customization ~10 minutes
+	Composite plots - 7 minutes
+	Plot exercise - 8 minutes
+	Share in groups - 8 minutes
+	Full group share - 8 minutes
+	Closing - 2 minutes
