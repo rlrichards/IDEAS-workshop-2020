@@ -1,5 +1,5 @@
 ---
-title: "07-Data-Visualization-ggplot2"
+title: "07-Data-Visualization-ggplot2-Solution"
 author: "Kate Sabey"
 date: "10/28/2020"
 output: html_document
@@ -39,27 +39,29 @@ ggplot(data = midwest, aes(x = area, y = poptotal)) +
 # Notice that the `+` allows us to add additional functions to the ggplot object. 
 # The layout of the plot suggests a relationship between area and population total.
 # Wwhat if we wanted to reverse this graphical relationship? We could switch the variables supplied to each aesthetic or use `+ coord_flip()`
-ggplot(data = midwest, aes(x = , y = )) +
+ggplot(data = midwest, aes(x = poptotal, y = area)) +
   geom_point() 
 
 # We still don't have all the information from our base R plot represented here, let's add some color!
 # Here we provide another aesthetic characteristic for just the points - their color will depend on the state.
 # And take a look at that nice legend that was automatically generated!
 ggplot(data = midwest, aes(x = area, y = poptotal)) +
-  geom_point(aes(col = )) 
+  geom_point(aes(col = state)) 
 
 # Now let's add more descriptive axis labels and titles
 # Take a look at the help page for the labs() function by typing ?labs
 # The code below will produce our colored plot with more descriptive x- and y-axis labels and a title
 ggplot(data = midwest, aes(x = area, y = poptotal)) +
   geom_point(aes(col = state)) +
-  labs()
+  labs(title = "Midwest",
+       x = "Area",
+       y = "Total Population")
 
 # Sometimes you want to visualize several features of the data in a single plot
 # Let's color the points by state as before, but change the shape of the points to correspond to whether or not in a metro area
 # How does this change the appearance of the legend?
 ggplot(data = midwest, aes(x = area, y = poptotal)) +
-  geom_point(aes(col = state, shape = )) +
+  geom_point(aes(col = state, shape = factor(inmetro))) +
   labs(title = "Midwest",
        x = "Area",
        y = "Total Population")
@@ -68,27 +70,29 @@ ggplot(data = midwest, aes(x = area, y = poptotal)) +
 # With facets, ggplot lets us quickly split our single plot into multiple panels, one for each state
 ggplot(data = midwest, aes(x = area, y = poptotal)) +
   geom_point() +
-  facet_grid()
+  facet_grid(. ~ state)
 
 # But what if we'd rather have our facets run vertically? How would we need to adjust our code?
 # Remember you can use `?facet_grid` to learn more about the function
 ggplot(data = midwest, aes(x = area, y = poptotal)) +
   geom_point() +
-  facet_grid()
+  facet_grid(state ~ .)
 
 # It seems reasonable that the relationship between size and area might differ between metropolitan areas and more rural areas
 # But this difference might also vary from state to state. Can we visualize all of that in one set of plots?
 # Create a set of plots which are faceted by both state and whether the county is in a metro area
 ggplot(data = midwest, aes(x = area, y = poptotal)) +
   geom_point() +
-  facet_grid()
+  facet_grid(state ~ inmetro)
 
 ## Challenge: How could you change the points from circles to be another shape?
 
 # Note that `fill` controls the fill color of each point and `col` controls the outline color
 ggplot(data = midwest, aes(x = area, y = poptotal)) +
-  geom_point(aes(fill = state, col = state), shape = , size = ) # make points into diamonds and increase point size
-
+  geom_point(aes(fill = state, col = state), shape = 23, size = 3) + # make points into diamonds and increase point size
+  labs(title = "Midwest",
+       x = "Area",
+       y = "Total Population")
 ```
 
 ## Plotting time series data
@@ -120,42 +124,43 @@ ggplot(data = weather_jan, aes(x = time_hour, y = temp)) +
 
 # How would we change the width of this line? We can use the size argument within `geom_line()` to change line width
 ggplot(data = weather_jan, aes(x = time_hour, y = temp)) + 
-  geom_line() + 
+  geom_line(size = 2) + 
   labs(x = "Time",
        y = "Temperature")
 
 # We may also care how temperature changes over time vary across different locations
 # So, we can recreate the plot to include one line for each airport by specifying the color aesthetic to represent "origin"
 ggplot(data = weather_jan, aes(x = time_hour, y = temp)) + 
-  geom_line(aes(), size = 2) +
+  geom_line(aes(color = origin), size = 2) +
   labs(x = "Time",
        y = "Temperature")
 
 # How could we change the order of the airports in the legend?
-# One way is to reorder the levels of the corresponding factor, then re-plot. We can do this using the `fct_relevel()` function.
-# Use the code below to switch the order to: JFK, LGA, EWR
+# One way is to reorder the levels of the corresponding factor, then re-plot. We can do this using the `fct_relevel()` function:
 weather_jan <- weather_jan %>%
-  mutate(origin = fct_relevel(origin, levels = c()))
+  mutate(origin = fct_relevel(origin, levels = c("JFK", "LGA", "EWR")))
 
 ggplot(data = weather_jan, aes(x = time_hour, y = temp)) + 
   geom_line(aes(color = origin), size = 2) +
   labs(x = "Time",
        y = "Temperature")
 
-# Practice: How would you change the title and labels of the legend? Hint: try adding a `scale_color_manual()` layer
+# Practice: How would you change the title and labels of the legend?
 # Alternatively, you could change the labels of each factor level in the data frame when re-ordering above 
 ggplot(data = weather_jan, aes(x = time_hour, y = temp)) + 
   geom_line(aes(color = origin)) +
   labs(x = "Time",
-       y = "Temperature") + # can also change title of legend according to aesthetic it corresponds to
-  scale_color_manual() 
+       y = "Temperature") + # change title of legend according to aesthetic it corresponds to
+  scale_color_manual(name = "Airport", 
+                     labels = c("New York - JFK", "New York - LGA", "Newark - EWR"), 
+                     values = c("blue", "red", "green")) 
 
 # Let's make our temperature plot look a bit cleaner by making use of some of ggplot's preset themes
 ggplot(data = weather_jan, aes(x = time_hour, y = temp)) + 
   geom_line(aes(color = origin)) +
   labs(x = "Time",
        y = "Temperature") +
-  theme_classic() # use the "classic" theme
+  theme_classic()
 
 # Outside of the theme presets, ggplot makes use of incredibly flexible formatting arguments
 # The following code will change the text font and size, change the line thickness, 
@@ -219,44 +224,87 @@ At the end of this exercise I'll ask that you send the code that produces your p
 ```{r geom group exercise}
 
 ### Group 1 ###
+## geom_col
+ggplot(data = weather, aes(x = month, y = temp, color = month)) +
+  geom_col(aes(x = month, y = temp)) +
+  labs(title = 'Temperatures along the year',
+       x = 'Month',
+       y = 'Temperature',
+       color = 'month')
 
-# geom_col
-# geom_bar
-
+## geom_bar
+ggplot(data = midwest, aes(x = state)) + 
+  geom_bar(aes(fill = state)) +
+  theme_classic() +
+  labs(x = "State", y = "Count", title = "Population by State") 
 
 ### Group 2 ###
+## geom_boxplot 
+ggplot(data = midwest, aes(x = category, y = area)) +
+  geom_boxplot() +
+  labs(x = "county group", y = "size")
 
-# geom_boxplot 
-# geom_violin
+## geom_violin
+ggplot(data=midwest, aes(x=state, y=percollege)) +
+  geom_violin(aes(fill=state)) +
+  labs(title = "Percent of State Pop.'s College Educated:",
+       subtitle = "By proportion county population",
+       x = "State",
+       y = "% Pop. College Educated",
+       color = "State",
+       caption = "Source: midwest") +
+  theme_light()
 
-# Extra Challenge: can you overlay points onto the boxplot? (Hint try "+ geom_jitter()")
-
+## Challenge: can you overlay points onto the boxplot? (Hint try "+ geom_jitter()")
+ggplot(data=weather.jan, aes(x=origin, y=temp)) + geom_boxplot() + geom_jitter(alpha=0.3)
 
 ### Group 3 ###
-
-# geom_area
-
+## geom_area
+i <- ggplot(midwest, aes(x = poptotal, y = popdensity)) 
+i + geom_area(aes(x = poptotal, y = popdensity), fill = "light blue") +
+  labs(x = "Population Total",
+       y = "Population Density") +
+  theme_classic()
 
 ### Group 4 ###
+## geom_histogram
+ggplot(data = weather_jan, aes(x = temp)) +
+  geom_histogram(aes(fill = origin)) +
+  labs(x = "Number of Readings",
+       y = "Temperature",
+       fill = "Airport") +
+  facet_grid(origin ~ .) +
+  theme_classic() 
 
-# geom_histogram
-# geom_dotplot or geom_density
-
+## geom_dotplot
+## geom_density
+ggplot(midwest, aes(x = percadultpoverty, fill = state)) +
+  geom_density(kernel = "gaussian")+
+  labs(x = "% adult poverty")+
+  facet_grid(state ~ .)
+theme_classic()
 
 ### Group 5 ###
-
-# geom_smooth
-
-# Extra Challenge: can you overlay the original data points behind the smooth line? (Hint: try "+ geom_point()")
-# Extra Challenge: can you change the function of the smooth line? (Hint: the "method" argument)
-
+## geom_smooth
+ggplot(data = midwest, aes(x = percollege, y = log10(poptotal))) +
+  geom_smooth(aes(color = state)) +
+  geom_point() +
+  labs(x = "Percent College",
+       y = "log10 Population Total",
+       title = "Percent College") +
+  theme_classic() +
+  facet_wrap(~state)
 
 ### Group 6 ###
-
-# scale_fill_
-# scale_color_
-
-# What can these functions change about the plot? (Hint: explore the "name", "labels", and "values" arguments)
+## scale_fill_
+## scale_color_
+ggplot(data = weather_jan, aes(x = time_hour, y = temp)) + 
+  geom_line(aes(color = origin)) +
+  theme_classic() +
+  labs(x = "Time",
+       y = "Temperature",
+       color = "Airport") +
+  scale_color_manual(values = c("#475577", "#DDAA77", "darkred"))
 
 ```
 
