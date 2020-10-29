@@ -1,5 +1,5 @@
 ---
-title: "code_along"
+title: "02-Code-Along"
 author: "Kate Sabey"
 date: "10/11/2020"
 output: html_document
@@ -9,12 +9,20 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE, eval = TRUE)
 ```
 
+## Introduction to R and Tidyverse
 
 The core tidyverse includes the packages that you're likely to use in everyday data analyses. Let's explore some of the functions using a dataset of passengers on the Titanic. This exercise is a modification of the DataCamp [Introduction to Tidyverse](https://github.com/datacamp/datacamp_facebook_live_intro_to_tidyverse).
 
-You can execute chunks by clicking the *Run* button (green arrow) within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter* or *Ctrl+Shift+Enter* on Windows. 
+You can execute lines of code by placing your cursor anywhere in that line and pressing *Cmd+Enter* or *Cntl+Enter*.
 
-First, we will install the tidyverse package
+You can also execute entire chunks by clicking the *Run* button (green arrow) within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter* or *Ctrl+Shift+Enter* on Windows. 
+
+A few other notes about R markdown:
+* Notice that R studio helps annotate your code's syntax with different colored text - comments, functions, numerical values, etc. will be highlighted.
+* It's also a good idea to add your own annotations or comments to your code to remind yourself and others what each line of code accomplishes - any code with a `#` preceding it will not be "seen" or run within a chunk.
+* It's common practice to provide certain information at the top of any R script or Rmd file: title/purpose, author name, and date
+
+With that, let's dive into the exercise! First, we will install the tidyverse package:
 
 ```{r message = FALSE}
 # Install the tidyverse
