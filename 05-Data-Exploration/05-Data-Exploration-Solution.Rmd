@@ -1,5 +1,5 @@
 ---
-title: "5-Data-Exploration"
+title: "05-Data-Exploration-Solution"
 author: "Kate Sabey"
 date: "10/25/2020"
 output: html_document
@@ -35,8 +35,8 @@ In addition to importing data from an external source (e.g. an xlsx or csv file)
 
 ```{r load flights data}
 
-install.packages("") # install package
-library() # load library
+install.packages("nycflights13") # install package
+library(nycflights13) # load library
 ```
 
 In addition to `flights`, you will notice the `nycflights13` package also includes other data sets including:
@@ -60,33 +60,41 @@ In data exploration, we will first describe the broad trends in the data by unde
 
 # 1. What is the data structure? How many columns and rows are there, and what data is represented in them?
 View(flights) # take a look at the whole flight data set as a separate tab in R studio
-str() 
-names() 
-summary() 
+str(flights) # 336776 rows (each row is a flight) and 19 columns, confirm column classes (e.g. numeric versus factor)
+names(flights) # returns names of columns
+summary(flights) # returns relevant stats for each column
 
 # 2. How many total flights and how many total flights per airline carrier?
 carrier_table <- flights %>% 
-  group_by() %>% 
+  group_by(carrier) %>% 
   summarize(n()) # returns total flights (rows) per airline carrier
+carrier_table
 
 ?table # this can also be accomplished using the table() function...
-carrier_table <- table()
+carrier_table <- table(flights$carrier)
+carrier_table
+
+carrier_table <- c() # ...or using a for loop!
+for(i in unique(flights$carrier)){
+  carrier_table[i] <- nrow(subset(flights, carrier == i))
+}
 carrier_table
 
 # 3. Create a new data set containing just United Airlines flights
 flights_UA <- flights %>%
-  filter() # data set with only UA flights
+  filter(carrier == "UA") # data set with only UA flights
+flights_UA
+nrow(flights_UA) # returns the number of United Airlines flights (~58K)
 
-nrow() 
+flights_UA <- subset(flights, carrier == "UA") # alternative option
 
-# Practice: how would we create a data set with all flights except UA? Hint: repeat filtering as above,
-# but with `!=` to specify "does not equal"
+flights_no_UA <- flights %>%
+  filter(carrier != "UA") # data set with all flights except UA
 
-# 4. What are the different flight destinations? How many destinations are there?
-flights_dest <- unique() # create vector of airport destinations using the unique function
-
-length() # get number of airport destinations
-
+# 4. What are the different flight destinations?
+flights_dest <- unique(flights$dest) # create vector of airport destinations using the unique function
+flights_dest # view airport destinations
+length(flights_dest) # get number of airport destinations (105)
 ```
 
 
@@ -105,21 +113,28 @@ Descriptive statistics built into R include: `mean`, `sd`, `var`, `min`, `max`, 
 # 1. What is the max, min, and mean flight arrival delay? How does the mean arrival delay break down by airline?
 
 ?max # check to determine function for excluding NAs in calculation
-max(X, na.rm = T)
+max(flights$arr_delay, na.rm = T)
+min(flights$arr_delay, na.rm = T)
+mean(flights$arr_delay, na.rm = T)
+
+summary(flights$arr_delay) # if we don't need the values individually, can also extract them from the summary() output
 
 flights %>%
-  group_by() %>%
-  summarize(mean_delay = mean())
+  group_by(carrier) %>%
+  summarize(mean_delay = mean(arr_delay, na.rm = T))
+
+summary(UA$arr_delay) # delay statistics for a single airline (UA in this case)
 
 # 2. What is the most common flight destination?
 flights %>%
-  group_by() %>%
-  summarize() %>%
-  arrange(desc()) # arranges in descending order
+  group_by(dest) %>%
+  summarize(number_flights = n()) %>%
+  arrange(desc(number_flights)) # arranges in descending order - ORD = most common
 
-# 3. What is the number of flights per month? Hint: you'll need the `group_by()` and `summarize()` functions again
+# 3. What is the number of flights per month?
 flights %>%
-
+  group_by(month) %>%
+  summarize(number_flights = n())
 
 ```
 
