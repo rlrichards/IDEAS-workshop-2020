@@ -29,13 +29,6 @@ Functions incorporate sets of instructions that you want to use repeatedly or th
 
 You can write your own functions, but `R` and its packages come with "pre-made" functions as well.
 
-Useful basic functions include include seq(), log(), sin()...
-
-A typical function has the following architecture
-```{r function, eval=FALSE}
-func.name = function (arglist)  {body}
-```
-
 ###**Practice**: Find and use a base R function
 
 Choose a function from the below list of base R functions.
@@ -68,7 +61,16 @@ Be prepared to share your new knowledge!
 
 ```
 
-##Example 1a: Simple function
+
+But sometimes there isn't an existing function that does what we need to do. 
+
+When we write functions ourselves they have the following architecture
+```{r function, eval=FALSE}
+func.name <- function (arglist)  {body}
+```
+
+
+##Example 1: Simple function
 ```{r function1}
 my.function1<-function(a,b,c){
  tmp<-a+b
@@ -93,20 +95,15 @@ out2
 
 ```
 
-##Example 1b: Rounding  function
-```{r function13}
-Roundme <- function(x){
-   #this function uses the floor function to 
-   #do what the round function does
-   x <- x+0.5
-   floor(x)
- }
-```
 
+
+#Control Statements and For Loops
+
+There are a couple of very special functions that can make our lives a lot easier by getting R to do a lot of thinking for us.
 
 ##Example 2a: Control statements **if**
 
-```{r function11}
+```{r if}
 x <- 8
 
 if (x < 9) print("x is less than nine")
@@ -119,7 +116,7 @@ if (x < 9) print("x is less than nine")
 
 ##Example 2b: Control statements **if else**
 
-```{r function3}
+```{r ifelse}
  a<-5
  if(a<1){
  b<-5
@@ -133,7 +130,7 @@ if (x < 9) print("x is less than nine")
 
 ###**Practice**: Uncomment and fill in a simple function with a nested if statement will print alternative outcomes
 
-```{r function14}
+```{r ifelse practice}
 
 #Isit <- function(x){
 # if (x == ??){
@@ -151,7 +148,7 @@ if (x < 9) print("x is less than nine")
 ```
 
 ##Example 2c: Control statements **while**
-```{r function10}
+```{r while}
 x <- 2
 while(x < 10){
  print(x)
@@ -161,9 +158,12 @@ while(x < 10){
 print("The end")
 ```
 
+
+
+
 ##Example 3a:**for** loop
 
-```{r function4}
+```{r for}
 a<-c() # creating an empty vector
  for(i in 1:10){ # i becomes 1 through 10 iteratively 
 a[i]<-i^3  # this is the operation
@@ -186,7 +186,7 @@ Hints:
 
 
 
-##<span style="color:cadetblue">Example 4:</span> Random number generation
+##Example 4: Random number generation
 
 Here is an example, there are a number of distributions available
 ```{r function5} 
@@ -195,15 +195,15 @@ random_numbers<-rnorm(3,mean=5,sd=3) # normal distribution generates 3 numbers w
 random_numbers
 ```
  
-##<span style="color:cadetblue">Example 5:</span> Descriptive stats 
+##Example 5: Descriptive stats 
 ```{r function6}  
 dat<-rnorm(30,mean=5,sd=3) # creating a vector
 
 dat # check it
 
-sort (dat) #sort vector
+sort(dat) #sort vector
 
-unique (dat) #unique values
+unique(dat) #unique values
 
 max(dat) #max
 
@@ -214,6 +214,8 @@ mean(dat) # taking the mean
 sum(dat) # sum the vector elements
 
 var(dat) # taking the variance
+
+sd(dat) # taking the standard deviation
 
 length(dat) # length of vector
 
@@ -228,13 +230,14 @@ sqrt(var(dat)/length(dat)) # standard error
 
 
 
+
 ##Example 6: The apply  function
 ```apply``` are functions to manipulate slices of data from matrices, arrays, lists and dataframes in a repetitive way 
 ```{r function7}  
 X <- matrix(rnorm(30), nrow=5, ncol=6) # creating a matrix
 
 # Sum the values of each column with `apply()`
-apply(X, 2, sum)
+apply(X, MARGIN = 2, FUN = sum)
 
 
 ```
@@ -244,6 +247,8 @@ apply(X, 2, sum)
 ```{r Row apply practice}
 
 ```
+
+
 
 ##Example 7: The lapply  function
 ```lapply``` applies a given function to every element of a list and obtain a list as result
@@ -269,8 +274,7 @@ l.mean <- sapply(l, mean)
 # what type of object was returned?
 class(l.mean)
 
-# it's a numeric vector, so we can get element "a" like this
-l.mean[['a']]
+l.mean
 
 ```
 
