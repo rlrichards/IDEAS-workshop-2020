@@ -24,9 +24,12 @@ A few other notes about R markdown:
 
 With that, let's dive into the exercise! First, we will install the tidyverse package:
 
-```{r message = FALSE}
+```{r install packages}
+
 # Install the tidyverse
 install.packages("tidyverse")
+install.packages("") # install the `here package to help upload data files
+
 ```
 
 Now that you've installed the tidyverse, it's time to load your package and data. Check out some of the observations.
@@ -35,28 +38,35 @@ In this code along session, you'll be exploring the [Titanic dataset](https://ww
 
 Load your data:
 
-```{r message = FALSE, warning=FALSE}
+```{r load data}
+
 # Import the Tidyverse
+library(tidyverse)
 library()
+
 # Import data
 passengers <- read_csv()
+
 # Check out the first several observations of your dataframe
+
+
 ```
 
 What are all of these variables? See [dataset description](https://www.kaggle.com/c/titanic/data) for more details.
 
-Code using tidyverse syntax starts with `data` and is followed by one or more `verbs` to be done to the data. The data and verbs are linked together using `%>%` which is called a pipe. You can type out the pipe operator or use the shortcut *Cmd+Shift+M*.  
-
 To get an overview of your data, use the function "summary":
 
-```{r message = FALSE}
-# Summary titanic using base R syntax
+```{r summarize data}
+
+# Summarize titanic data using base R syntax
 
 ```
 
 Now do the same using a pipe, one of the handiest tools in the tidyverse:
 
-```{r message = FALSE}
+Code using tidyverse syntax starts with `data` and is followed by one or more `verbs` to be done to the data. The data and verbs are linked together using `%>%` which is called a pipe. You can type out the pipe operator or use the shortcut *Cmd+Shift+M*.  
+
+```{r summarize data with pipe}
 # Summarize titanic using a pipe
 
 ```
@@ -67,8 +77,9 @@ You may have noticed stylistic consistency in the code that we've written above.
 
 Now let's add `drop_na()` before the `summary()` function. What do you think will happen? 
 
-```{r message = FALSE}
-# Summarize titanic after dropping na
+```{r remove NAs}
+
+# Summarize titanic after dropping NAs
 
 ```
 
@@ -91,8 +102,10 @@ Let's sat that we wanted to choose a particular set of observations, say, those 
 
 The `filter` verb chooses only the observations that match the condition. See it in action:
 
-```{r message = FALSE}
+```{r filter males}
+
 # Filter to get all "male" rows
+
 
 ```
 
@@ -104,8 +117,10 @@ The `filter` verb chooses only the observations that match the condition. See it
 * the above does **not** alter the original dataframe.
 * `filter(Sex = "male")` is a common error (I've made it); there's a cool [tidyverse error guide](http://style.tidyverse.org/error-messages.html). We will go into errors in more detail in a bit. 
 
-```{r message = FALSE}
+```{r filter females}
+
 # Filter to get all "female" rows
+
 
 ```
 
@@ -113,8 +128,10 @@ The `filter` verb chooses only the observations that match the condition. See it
 
 Lets say you wanted to `arrange` your observations by increaing Fare to see if you can notice any trends. How can we use the **verb** `arrange` to achieve this? 
 
-```{r message = FALSE}
+```{r arrange increasing}
+
 # Arrange by increasing Fare
+
 
 ```
 
@@ -122,8 +139,10 @@ Lets say you wanted to `arrange` your observations by increaing Fare to see if y
 
 You can also `arrange` by decreasing Fare:
 
-```{r message = FALSE}
+```{r arrange decreasing}
+
 # Arrange by decreasing Fare
+
 
 ```
 
@@ -131,7 +150,8 @@ You can also `arrange` by decreasing Fare:
 
 Sometimes you may wish to create new variables. We know that the variable "Parch" is the number of parents and children while "SibSp" is the number of siblings and spouses. We can add these together to get a new variable "FamSize". To do so, you `mutate` the original variables into the new one.
 
-```{r message = FALSE}
+```{r add columns}
+
 # Create new column FamSize (size of family)
 
 ```
@@ -141,13 +161,12 @@ Sometimes you may wish to create new variables. We know that the variable "Parch
 * `mutate()` can be used to create new columns but also modify existing columns in much the same way that a mutation may from a biological perspective. It's not exactly right but a nice way to provide context for verb choice.
 * The `dplyr` [cheatsheet](https://www.rstudio.com/resources/cheatsheets/) has useful visualizations for the different ways to create a new variable.
 
-![](figs/dplyr.png)
-
 Is it possible that larger families have a lower rate of survival?
 
 To test this hypothesis, create a new variable "FamSize" as the sum of "Parch" and "SibSp" as above, then arrange by decreasing "FamSize":
 
-```{r message = FALSE}
+```{r add then arrange}
+
 # Create new column FamSize (size of family)
 # Then arrange by decreasing FamSize
 passengers %>% 
@@ -158,23 +177,23 @@ passengers %>%
 
 **Try on your own**
 
-We are interested in how different passenger characteristics relates to survival. As we move on to the next steps, we might want a more informative survival data than the current `Survived` data which is represented as zeros and ones. We can mutate the values of the "Survived" variable to strings "No" and "Yes" using the `ifelse()` function. Use the `?function()` syntax to look up the manual page for the `ifelse()` function.  What do you think the code should be? 
+We are interested in how different passenger characteristics relates to survival. As we move on to the next steps, we might want a more informative survival data than the current `Survived` data which is represented as zeros and ones. We can mutate the values of the "Survived" variable to strings "No" and "Yes" using the `recode()` function. Use the `?function()` syntax to look up the manual page for the `recode()` function.  What do you think the code should be? 
 
-*hint: if you're stuck review the anatomy of a manual page*
-![](figs/read-a-help-page.png)
+```{r recoding variables}
 
-
-```{r message = FALSE}
 # Turn numerical values of Survived column to "No" & "Yes" 
 passengers %>% 
-  mutate(Survived = ifelse())
+  mutate(Survived = recode())
+
 ```
 
 
 So far, our new variables have just been printed to the console, but not saved. If we want to explore our new variable further we will save it as a new dataframe called `passengers1`. The way we create and save this new object is similar to how the data was loaded using assingment arrow `<-`. The shortcut for the assignment arrow is *option+dash*.  
 
-```{r message = FALSE}
-# Turn numerical values of Survived column to "No" & "Yes" ( and save to new dataframe)
+```{r assigning objects}
+
+# Assign to a new data frame
+
 
 ```
 
@@ -189,7 +208,6 @@ Commonly used verbs (`dplyr` package):
 * group_by()	allows for group operations in the “split-apply-combine” concept
 
 Reference the `dplyr` [cheatsheet](https://www.rstudio.com/resources/cheatsheets/), or [package vignette](https://cran.r-project.org/web/packages/dplyr/vignettes/dplyr.html) for more details. 
-
 
 
 **Recap:**
@@ -212,11 +230,12 @@ To plot your data using `ggplot2`, you specify three things:
 * Your aesthetics (e.g. at minimium what's on the x-axis)
 * Your layers (e.g. barplot, scatterplot)
 
-
 First you'll plot a barplot of Sex to see how many males and females were recorded aboard the Titanic:
 
-```{r message = FALSE}
+```{r barplot}
+
 # Plot barplot of passenger Sex
+
 
 ```
 
@@ -228,8 +247,10 @@ First you'll plot a barplot of Sex to see how many males and females were record
 
 Now it's time for some scatter plots. Is the Age of any given passenger correlated with the Fare that they paid?
 
-```{r message = FALSE}
-# Scatter plot of Age vs Fare
+```{r scatterplot}
+
+# Scatterplot of Age vs Fare
+
 
 ```
 
@@ -241,43 +262,12 @@ Now it's time for some scatter plots. Is the Age of any given passenger correlat
 
 Recall that we describe the strength of correlation ($\rho$), and if the correlation between the two variables is greater than chance. 
 
-```{r}
-#correlation test of Age vs Fare
+```{r correlation}
+
+# Correlation test of Age vs Fare
 cor.test()
 
 ```
-
-**How would you interpret the output?**
-
-Let's take the previous plot and color each point by Sex, to see any correlations between Sex, Age and Fare:
-
-```{r message = FALSE}
-# Scatter plot of Age vs Fare colored by Sex
-
-```
-
-**What can you see here?** 
-
-Visualizing three variables on one plot is pretty cool, but what if wanted to throw the Survived variable into the mix to see if there are any apparent trends?
-
-Faceting is a way to produce multiple plots simultaneously:
-
-```{r message = FALSE}
-# Scatter plot of Age vs Fare colored by Sex faceted by Survived
-
-```
-
-**What can you see here?** 
-
-Now let's redo our bar plot of passenger "Sex" and this time fill our bars according to "Survived":
-
-```{r message = FALSE}
-# Plot barplot of passenger Sex & fill according to Survival
-
-```
-
-**What can you see here?** 
-
 
 **Recap:**
 
@@ -289,58 +279,68 @@ Now let's redo our bar plot of passenger "Sex" and this time fill our bars accor
 This was a first introduction to `ggplot2`, but we will be returning to data visualizations often. 
 Reference the `ggplot2` [cheatsheet](https://www.rstudio.com/resources/cheatsheets/), or the [many examples](http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html) for more details. 
 
-
 **Up next:**
 
 * Learn how to summarise your data across many dimensions, such as "Sex".
 
 
-
 ## Summarizing and grouping your data
 
-Use the `summarise` verb to find out the mean fare paid:
+Use the `summarise` verb to find the mean fare paid:
 
-```{r message = FALSE}
-# Check out mean Fare
+```{r summarize mean}
+
+# Determine mean Fare
+
 
 ```
 
-Use the `summarise` verb to find out the median fare paid:
+Use the `summarise` verb to find the median fare paid:
 
-```{r message = FALSE}
-# Check out mean Fare
+```{r summarize median}
+
+# Determine median Fare
+
 
 ```
 
 **Note:**
   The British (`summarise()`) and American (`summarize()`) english spelling of the verb are interchangeable. 
  
-Use the `filter` and `summarise` verbs to find out the mean fare paid among women:
+Use the `filter` and `summarise` verbs in sequence to find the mean fare paid among women:
 
-```{r message = FALSE}
-# Check out mean Fare for women
+```{r filter and summarize mean}
+
+# Determine mean Fare for women
+
 
 ```
 
-Use the `filter` and `summarise` verbs to find out the mean fare paid among women **and** how many women survived:
+Use the `filter` and `summarise` verbs to find the mean fare paid among women **and** how many women survived:
 
-```{r message = FALSE}
-# Check out mean Fare & number of survivors for women
+```{r filter and summarize survival}
+
+# Determine mean Fare & number of survivors for women
+
 
 ```
 
 Use the `group_by` and `summarise` verbs to find the mean fare and number of survivors as a function of sex:
 
-```{r message = FALSE}
-# Check out mean Fare & number of survivors grouped by Sex
+```{r group by and summarize}
+
+# Determine mean Fare & number of survivors grouped by Sex
+
 
 ```
 
 Use the `group_by` and `summarise` verbs to find the mean fare and proportion of survivors as a function of sex:
 
 
-```{r message = FALSE}
-# Check out mean Fare & proportion of survivors grouped by Sex
+```{r group by and summarize proportion}
+
+# Determine mean Fare & proportion of survivors grouped by Sex
+
 
 ```
 
@@ -353,12 +353,7 @@ Use the `group_by` and `summarise` verbs to find the mean fare and proportion of
 * You've learnt how to summarise your data across many dimensions, such as "Sex".
 
 
-**Up next:**
-
-* Break! 
-* Troubleshooting errors (lecture)
-
-##  Exploring further
+## Exercise (Time-Permitting)
 
 We will now use some of the skills we've just learnt to answer a our own questions! 
 
@@ -369,11 +364,9 @@ As a group:
 3.  Write the code for the analysis. Designate a computer that will have the completed code. If you are not actively typing, you can help your group by thinking about what should come next or proof reading what has already been typed. Be sure to test your code often. 
 
 
-```{r, eval = TRUE}
-#write your analysis here
-```
+```{r}
 
-4. When you are finished:
-  - save the file with your group number (ie. `W1_Group1.Rmd`)  
-  - Knit the `.Rmd` (short for RMarkdown) to HTML using the Knit button. Open the HTML, what does it look like? We will explore this more during the next workshop. 
-  - email the `.Rmd` to your group members and Ania (majewska@uga.edu). 
+# Write your analysis here
+
+
+```

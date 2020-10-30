@@ -1,0 +1,483 @@
+---
+title: "02-Code-Along-Solution"
+author: "Kate Sabey"
+date: "10/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction to R and Tidyverse
+
+The core tidyverse includes the packages that you're likely to use in everyday data analyses. Let's explore some of the functions using a dataset of passengers on the Titanic. This exercise is a modification of the DataCamp [Introduction to Tidyverse](https://github.com/datacamp/datacamp_facebook_live_intro_to_tidyverse).
+
+You can execute lines of code by placing your cursor anywhere in that line and pressing *Cmd+Enter* or *Cntl+Enter*.
+
+You can also execute entire chunks by clicking the *Run* button (green arrow) within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter* or *Ctrl+Shift+Enter* on Windows. 
+
+A few other notes about R markdown:
+* Notice that R studio helps annotate your code's syntax with different colored text - comments, functions, numerical values, etc. will be highlighted.
+* It's also a good idea to add your own annotations or comments to your code to remind yourself and others what each line of code accomplishes - any code with a `#` preceding it will not be "seen" or run within a chunk.
+* It's common practice to provide certain information at the top of any R script or Rmd file: title/purpose, author name, and date
+
+With that, let's dive into the exercise! First, we will install the tidyverse package:
+
+```{r install packages}
+
+# Install the tidyverse
+install.packages("tidyverse")
+install.packages("here")
+
+```
+
+Now that you've installed the tidyverse, it's time to load your package and data. Check out some of the observations.
+
+In this code along session, you'll be exploring the [Titanic dataset](https://www.kaggle.com/c/titanic), where each observation is a person and each variable is a feature such as "Name", "Age" and "Survived" (or not). We will be exploring this data using tidyverse with a focus on [dplyr](http://dplyr.tidyverse.org/) for data wrangling and [ggplot2](http://ggplot2.tidyverse.org/) for data visualization
+
+Load your data:
+
+```{r message = FALSE, warning=FALSE}
+
+# Import the Tidyverse
+library(tidyverse)
+library(here)
+
+# Import data
+passengers <- read_csv("~/Desktop/R_Bootcamp/train.csv") # sample (full) path for mac
+passengers <- read_csv(here("train.csv")) # use the `here` package to start in current working directory
+
+# Check out the first several observations of your dataframe
+passengers # remind definition of data frame and where to find key information. what does each row of data represent? How are missing values included?
+
+# other ways to view data...
+View(passengers) # to pull up data as separate tab in R studio rather than as a chunk in R markdown - can be easier to navigate for larger data sets
+# or can click on data set in environment section
+
+```
+
+What are all of these variables? See [dataset description](https://www.kaggle.com/c/titanic/data) for more details.
+
+To get an overview of your data, use the function "summary":
+
+```{r summarize data}
+
+# Summary titanic using base R syntax
+summary(passengers) # what types of information are included?
+# str(passengers) - mention if have time, gives list of column types
+
+```
+
+Now do the same using a pipe, one of the handiest tools in the tidyverse:
+
+Code using tidyverse syntax starts with `data` and is followed by one or more `verbs` to be done to the data. The data and verbs are linked together using `%>%` which is called a pipe. You can type out the pipe operator or use the shortcut *Cmd+Shift+M*.  
+
+```{r summarize data with pipe}
+# Summarize titanic using a pipe
+passengers %>% 
+  summary()
+
+# pipes allow you to shuttle data from one function to another - like the game telephone, where it gets altered a little bit at each stopping point. 
+
+# using this syntax produces the same as above, but has the advantage of allowing us to string together functions/verbs/things we want to "do" to a data frame, but without having to re-specify the data every single time
+
+# note that the parentheses after each function need to be included even if they appear empty - the pipe will automatically "place" the input data into each of these functions and apply any other modifiers/function options that you specify here
+
+```
+
+Now let's add `drop_na()` before the `summary()` function. What do you think will happen? Note that there is a pipe operator between each function to "send" the data from one function to the next.
+
+```{r remove NAs}
+
+# Summarize titanic after dropping NAs
+passengers %>% 
+  drop_na() %>% 
+  summary() 
+
+```
+
+You may have noticed stylistic consistency in the code that we've written above (e.g. placing each function on its own line, and tabbed so that each function is easy to find). That's because we're adhering to a style guide. In data science *and* programming/coding in general, it's important to get accustomed to using a style guide asap. As Hadley Wickham puts it in the [tidyverse style guide](http://style.tidyverse.org/index.html),
+
+> Good coding style is like correct punctuation: you can manage without it, butitsuremakesthingseasiertoread.
+
+Adhering to a style guide will also make your code easier to troubleshoot and locate potential problem spots as it becomes more complex.
+
+**Recap:**
+
+* You've imported your data & checked it out
+* You've learnt about the pipe operator `%>%`
+
+**Up next:**
+
+* Data wrangling with `dplyr` to **filter** your data, **arrange** it and create new features by **mutating** old ones.
+
+## Wrangle your data
+
+Now it's time to explore your data and get some initial insight into the dataset. You'll be using more `dplyr` **verbs** such as `filter`, `arrange` and `mutate`, which pretty much do exactly what they say. 
+
+Let's sat that we wanted to choose a particular set of observations, say, those for which the "Sex" was 'female'. `dplyr` allows us to do intuitively and in a language that mirrors how we think and talk about data.
+
+The `filter` verb chooses only the observations that match the condition you specify. See it in action:
+
+```{r filter male}
+
+# Filter to get all "male" rows
+passengers %>% 
+  filter(Sex == "male")
+
+# how many rows of data are in the data frame now? Check the sex column - did the function work as you intended? also notice the gaps in passenger IDs compared to the data frame above
+
+```
+
+**What can you see here?** Any ideas about whether men are likely to have survived or not?
+
+**Note**: 
+
+* you can read `dplyr` code like a sentence: take your data and then (`%>%`) filter it according the condition that the sex is male.
+* the above does **not** alter the original dataframe.
+* `filter(Sex = "male")` is a common error (I've made it); there's a cool [tidyverse error guide](http://style.tidyverse.org/error-messages.html). We will go into errors in more detail in a bit. 
+
+```{r filter female}
+
+# Now filter to get all "female" rows
+passengers %>% 
+  filter(Sex == "female") 
+
+```
+
+**What can you see here?** Any ideas about whether women are likely to have survived or not?
+
+Lets say you wanted to `arrange` your observations by increaing Fare to see if you can notice any trends. How can we use the **verb** `arrange` to achieve this? 
+
+```{r arrange increasing}
+
+# Arrange by increasing Fare
+passengers %>% 
+  arrange(Fare) # what was the highest ticket price?
+
+```
+
+**What can you see here?** 
+
+You can also `arrange` by decreasing Fare:
+
+```{r arrange decreasing}
+
+# Arrange by decreasing Fare
+passengers %>% 
+  arrange(desc(Fare)) # what was the lowest ticket price?
+
+```
+
+**What can you see here?** 
+
+Sometimes you may wish to create new variables. We know that the variable "Parch" is the number of parents and children while "SibSp" is the number of siblings and spouses. We can add these together to get a new variable "FamSize", for each passenger. To do so, we'll `mutate` the original variables into a new one.
+
+```{r add columns}
+
+# Create new column FamSize (size of family)
+passengers %>% 
+  mutate(FamSize = Parch + SibSp)
+
+```
+
+**Note:**
+
+* `mutate()` can be used to create new columns but also modify existing columns in much the same way as we think of mutations from a biological perspective.
+* The `dplyr` [cheatsheet](https://www.rstudio.com/resources/cheatsheets/) has useful visualizations for the different ways to create a new variable.
+
+Is it possible that larger families have a lower rate of survival?
+
+To test this hypothesis, create a new variable "FamSize" as the sum of "Parch" and "SibSp" as above, then arrange by decreasing "FamSize":
+
+```{r add then arrange}
+
+# Create new column FamSize (size of family)
+# Arrange by decreasing FamSize
+passengers %>% 
+  mutate(FamSize = Parch + SibSp) %>% 
+  arrange(desc(FamSize))
+
+```
+
+
+**Try on your own**
+
+We are interested in how different passenger characteristics relates to survival. As we move on to the next steps, we might want a more informative survival data than the current `Survived` data which is represented as zeros and ones. We can mutate the values of the "Survived" variable to strings "No" and "Yes" using the `recode()` function. Use the `?function()` syntax to look up the manual page for the `recode()` function.  What do you think the code should be? 
+
+```{r recode variables}
+
+# Turn numerical values of Survived column to "No" & "Yes" 
+passengers %>% 
+  mutate(Survived = recode(Survived, `0` = "No", `1` = "Yes"))
+# did this work as you intended? Remember we didn't change the original data frame so you can always view the original again to double check
+
+```
+
+So far, our new variables have just been printed to the console, but not saved. If we want to explore our new variable further we will save it as a new dataframe called `passengers1`. The way we create and save this new object is similar to how the data was loaded using assingment arrow `<-`. The shortcut for the assignment arrow is *option+dash*.  
+
+```{r assigning objects}
+
+# Assign to a new data frame
+passengers1 <- passengers %>% 
+  mutate(Survived = recode(Survived, `0` = "No", `1` = "Yes"))
+
+passengers1
+
+```
+
+
+Commonly used verbs (`dplyr` package): 
+
+* select()	select (or remove) columns
+* filter()	filter rows
+* arrange()	re-order or arrange rows
+* mutate()	create new columns
+* summarise()	summarise values
+* group_by()	apply operations to groups of rows 
+
+Reference the `dplyr` [cheatsheet](https://www.rstudio.com/resources/cheatsheets/), or [package vignette](https://cran.r-project.org/web/packages/dplyr/vignettes/dplyr.html) for more details on each function. 
+
+
+**Recap:**
+
+* You've imported your data & explored different variables
+* You've learnt about the pipe operator `%>%`
+* You can now use `dplyr` to wrangle your data: `filter` it, `arrange` it, and create new features by `mutating` old ones.
+
+
+**Up next:**
+
+* You'll learn how to easily and intuitively plot your data using `ggplot2`.
+
+
+## Plotting your data
+
+To plot your data using `ggplot2`, you need to specify three things:
+
+* Your data (`passengers1`)
+* Your aesthetics (e.g. at minimium what's on the x-axis)
+* Your layers (e.g. called "geoms": barplot, scatterplot)
+
+First we'll make a barplot of the number of passengers by Sex to see how many males and females were recorded aboard the Titanic:
+
+```{r barplot}
+
+# First, we'll start by making a ggplot object
+# The first argument in the function is the dataframe
+# The second argument takes an aes() function which defines the variables of the dataframe for each dimension of the plot
+# Let's try running this line of code. What do you see?
+ggplot(data = passengers1, aes(x = Sex))
+
+# When using ggplot we need to also tell R what type of graphical geometry we want it to add
+# We want to make a barplot so we'll use the argument geom_bar() to add bars to the plot
+# Plot barplot of passenger Sex
+ggplot(data = passengers1, aes(x = Sex)) + # aesthetics specify what data you want to visualize
+  geom_bar() # add geometry layer that tells what kind of plot, or how you want your data to be visualized
+
+# again, open parantheses in geom will access any of input to ggplot function above
+```
+
+**What can you see here?** 
+
+**Note:**
+
+*  the `aes()` function is really a way to map the `aes`thetics of the plot to the variables in the data. Essentially, this specifies what data you want to appear on the plot. See [Modern Dive](http://moderndive.com/3-viz.html#grammarofgraphics) by Chester Ismay & Albert Y. Kim for more.
+
+Now let's make a scatter plot instead. Is the Age of any given passenger correlated with the Fare that they paid?
+
+```{r scatterplot}
+
+# Scatterplot of Age vs Fare
+
+ggplot(passengers1, aes(x = Age, y = Fare)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+```
+
+**What can you see here?** 
+
+**Note:**
+
+* You can read your `ggplot2` code like a sentence, just like your `dplyr` code above: "We take the data as titanic and we map Age to the x axis and Fare to the y axis, adding points on as the layer of the plot."
+
+Recall that we describe the strength of correlation ($\rho$), which ranges from 0 to 1 and if the correlation between the two variables is greater than chance. 
+
+```{r correlation}
+
+cor.test(passengers1$Age, passengers1$Fare) # to call one column of a data frame, use the `$` operator
+
+```
+
+**How would you interpret the output?**
+
+
+Let's take the previous plot and color each point by Sex, to see any correlations between Sex, Age and Fare:
+
+```{r message = FALSE}
+
+# Scatter plot of Age vs Fare colored by Sex
+ggplot(passengers1 %>% drop_na(), aes(x = Age, y = Fare, color = Sex)) + # to add in a third variable, specify the aesthetic of the plot you want to display this information, in this case color of our geom (points)
+  geom_point()
+
+# notice how we can use a pipe within the data specification to modify the data that is inputted to ggplot
+```
+
+**What can you see here?** 
+
+Visualizing three variables on one plot is pretty cool, but what if wanted to throw the Survived variable into the mix to see if there are any apparent trends?
+
+Faceting is a way to produce multiple plots (with common axes) simultaneously. To separate our plot into facets, we'll add another layer
+
+```{r message = FALSE}
+
+# Scatter plot of Age vs Fare colored by Sex faceted by Survived
+ggplot(passengers1, aes(x = Age, y = Fare, color = Sex)) +
+  geom_point() +
+  facet_grid(~Survived)
+
+```
+
+**What can you see here?** 
+
+Now let's redo our bar plot of passenger "Sex" and this time fill our bars according to "Survived":
+
+```{r message = FALSE}
+
+# Plot barplot of passenger Sex & fill bars according to Survival
+ggplot(passengers1, aes(x = Sex, fill = Survived)) + # depending on geom/shape, either "color" or "fill" will refer to outline versus fill of shape
+  geom_bar()
+
+```
+
+**What can you see here?** 
+
+
+**Recap:**
+
+* You've imported your data & checked it out
+* You've learnt about the pipe operator `%>%`
+* You can now use `dplyr` to wrangle your data: `filter` it, `arrange` it and create new features by `mutating` old ones.
+* You've learnt how to easily and intuitively plot your data using `ggplot2`.
+
+This was a first introduction to `ggplot2`, but we will be returning to data visualizations often. 
+Reference the `ggplot2` [cheatsheet](https://www.rstudio.com/resources/cheatsheets/), or the [many examples](http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html) for more details. 
+
+**Up next:**
+
+* Learn how to summarise your data across many dimensions, such as "Sex".
+
+
+## Summarizing and grouping your data
+
+Use the `summarise` verb to find the mean fare paid:
+
+```{r summarize mean}
+
+# Determine mean Fare
+passengers %>% 
+  summarise(meanFare = mean(Fare))
+
+```
+
+Use the `summarise` verb to find the median fare paid:
+
+```{r summarize median}
+
+# Determine median Fare
+passengers %>% 
+  summarise(medianFare = median(Fare))
+
+```
+
+**Note:**
+  The British (`summarise()`) and American (`summarize()`) english spelling of the verb are interchangeable. This is true for `color` too!
+ 
+Use the `filter` and `summarise` verbs in sequence to find the mean fare paid among men:
+
+```{r message = FALSE}
+
+# Determine mean Fare for men
+passengers %>% 
+  filter(Sex == "male") %>% 
+  summarise(meanFare = mean(Fare))
+
+```
+
+Use the `filter` and `summarise` verbs together to find the mean fare paid among women:
+
+```{r filter and summarize mean}
+
+# Determine mean Fare for women
+passengers %>% 
+  filter(Sex == "female") %>% 
+  summarise(meanFare = mean(Fare))
+
+```
+
+Use the `filter` and `summarise` verbs to return both the mean fare paid among women **and** how many women survived:
+
+```{r filter and summarize survival}
+
+# Determine mean Fare & number of survivors for women
+passengers %>% 
+  filter(Sex == "female") %>% 
+  summarise(meanFare = mean(Fare), 
+            numSurv = sum(Survived)) # notice how we used a comma to perform this same function on two different parts of the data
+
+```
+
+Similarly, if we want to find this information for both sexes, rather than one at a time, we can instead use the `group_by` and `summarise` verbs to find the mean fare and number of survivors as a function of sex:
+
+```{r group by and summarize}
+
+# Determine mean Fare & number of survivors grouped by Sex
+passengers %>% 
+  group_by(Sex) %>% # will group data according to specified categories and perform downstream functions on those groups
+  summarise(meanFare = mean(Fare), 
+            numSurv = sum(Survived))
+
+```
+
+Now use the `group_by` and `summarise` verbs to find the mean fare and the *proportion* of survivors as a function of sex:
+
+```{r group by and summarize proportion}
+
+# Determine mean Fare & proportion of survivors grouped by Sex
+passengers %>% 
+  group_by(Sex) %>% 
+  summarise(meanFare = mean(Fare), 
+            numSurv = sum(Survived)/n()) # note that here, the `n()` function will return the total number of rows in each group
+
+```
+
+**Recap:**
+
+* You've imported your data & checked it out
+* You've learnt about the pipe operator `%>%`
+* You can now use `dplyr` to wrangle your data: `filter` it, `arrange` it and create new features by `mutating` old ones.
+* You've learnt how to easily and intuitively plot your data using `ggplot2`.
+* You've learnt how to summarise your data across many dimensions, such as "Sex".
+
+
+## Exercise (Time-Permitting)
+
+We will now use some of the skills we've just learnt to answer a our own questions! 
+
+As a group: 
+
+1. Develop a question that can be answered with the `passengers1` dataset. See [dataset description](https://www.kaggle.com/c/titanic/data) for more details on each of the columns.
+2. Talk through how the data needs to be manipulated to get the appropriate answer. Would plotting the data be useful? Which verbs will you use and in what order? 
+3. Write the code for the analysis. Designate a computer that will have the completed code. If you are not actively typing, you can help your group by thinking about what should come next or proof reading what has already been typed. Be sure to test your code often. 
+
+
+```{r}
+
+# Write your analysis here
+
+
+```
+
+
