@@ -14,7 +14,6 @@ knitr::opts_chunk$set(echo = TRUE)
 This module will cover:
 * Assigning objects
 * Data structure and syntax
-* Troubleshooting through Rstudio
 * Data subsetting
 
 ## R Objects
