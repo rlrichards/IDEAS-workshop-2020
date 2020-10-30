@@ -268,11 +268,11 @@ However, as we will see throughout the workshop, the `R` community lead by Garre
 ```{r creating and manipulating data frames}
 
 # Creating a data frame from a series of vectors
-n = c(2, 3, 5) 
-s = c("aa", "bb", "cc") 
-b = c(TRUE, FALSE, TRUE) 
+n <- c(2, 3, 5) 
+s <- c("aa", "bb", "cc") 
+b <- c(TRUE, FALSE, TRUE) 
 
-df = data.frame(n, s, b)
+df <- data.frame(n, s, b)
  
 colnames(df) <- c("ID","Code","Passed") # change column names
 colnames(df)
@@ -285,6 +285,11 @@ df[1,] # subsetting a row
 
 # ...or we can also use the `$` symbol for subsetting by a known column name
 df$ID # returns only the "ID" column
+
+# Lastly we can subset rows of our data based on specific metadata using the `subset()` function
+# Note that this is analogous to the `filter()` function from the tidyverse before
+# Let's make a new data frame showing only data for ID's that "Passed"
+df_passed <- subset(df, Passed == TRUE)
 
 ```
 
