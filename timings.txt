@@ -48,8 +48,14 @@
 	Full group share - 8 minutes
 	Closing - 2 minutes
 
-08 - Data Visualization (ggplot2) ~ 100 min
-	Sections
+07 - Data Visualization (ggplot2) ~ 100 min
+	Scatter plot			10 min
+	Line plot			15 min +10 min challenges
+	Geom breakout rooms		30 min +20 min share
+	Plotly				5 min
+	Maps				7 min
+	Merge and save plots		10 min
+	
 
 08 - Data Wrangling ~ 55 min
 	Wrangling intro			3 min
