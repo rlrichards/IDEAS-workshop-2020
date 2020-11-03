@@ -75,7 +75,7 @@ Code using tidyverse syntax starts with `data` and is followed by one or more `v
 
 ```{r summarize data with pipe}
 # Summarize titanic using a pipe
-passengers %>% 
+passengers %>%
   summary()
 
 # pipes allow you to shuttle data from one function to another - like the game telephone, where it gets altered a little bit at each stopping point. 
@@ -116,7 +116,7 @@ Adhering to a style guide will also make your code easier to troubleshoot and lo
 
 Now it's time to explore your data and get some initial insight into the dataset. You'll be using more `dplyr` **verbs** such as `filter`, `arrange` and `mutate`, which pretty much do exactly what they say. 
 
-Let's sat that we wanted to choose a particular set of observations, say, those for which the "Sex" was 'female'. `dplyr` allows us to do intuitively and in a language that mirrors how we think and talk about data.
+Let's say that we wanted to choose a particular set of observations, say, those for which the "Sex" was 'male'. `dplyr` allows us to do intuitively and in a language that mirrors how we think and talk about data.
 
 The `filter` verb chooses only the observations that match the condition you specify. See it in action:
 
@@ -204,7 +204,7 @@ passengers %>%
 
 **Try on your own**
 
-We are interested in how different passenger characteristics relates to survival. As we move on to the next steps, we might want a more informative survival data than the current `Survived` data which is represented as zeros and ones. We can mutate the values of the "Survived" variable to strings "No" and "Yes" using the `recode()` function. Use the `?function()` syntax to look up the manual page for the `recode()` function.  What do you think the code should be? 
+We are interested in how different passenger characteristics relate to survival. As we move on to the next steps, we might want a more informative survival data than the current `Survived` data which is represented as zeros and ones. We can mutate the values of the "Survived" variable to strings "No" and "Yes" using the `recode()` function. Use the `?function()` syntax to look up the manual page for the `recode()` function.  What do you think the code should be? 
 
 ```{r recode variables}
 
