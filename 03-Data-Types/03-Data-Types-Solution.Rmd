@@ -58,11 +58,11 @@ We can use a few base `R` functions to get information about objects. Some helpf
 # What is the class of myname?
 # Based on the descriptions above, we can guess that is should be a character - let's use the `class()` function to double check. 
 
-?typeof() #look up documentation for typeof()
+?typeof #look up documentation for typeof()
 typeof(myname) #return the object type of "myname"
 
 # How long is the myname object?
-?length()
+?length
 length(myname) # This object has a length of one. Why?
 
 # Now let’s make a numeric class object with a length greater than 1
@@ -98,7 +98,7 @@ We can concatenate objects into a vector using `c()`
 # You can create vectors of several different classes of elements
 character_vector <- c("a", "b", "c")
 numeric_vector <- c(1, 10, 49)
-boolean_vector <- c("TRUE", "FALSE", "TRUE")
+logical_vector <- c(TRUE, FALSE, TRUE)
 
 # You can also create vectors using handy functions such as `rep()` and `seq()`
 vec1 <- rep(1:4, 2)
@@ -144,7 +144,7 @@ which(vec7 == 2) # what happened here?
 
 # Factors
 
-Factors are used for ordered (e.g. low, medium, high) or unordered (e.g. blue, red, green) categorical data, represented as either characteris or numerics. This data type is important for modeling and plotting work. Factors can only contain pre-defined values and are how we can add labels to integers. For example, if sampling sites are labeled as numbers (e.g. sites 1, 2, 3), we can use factors to tell `R` that these values are actually categorical rather than continuous.
+Factors are used for ordered (e.g. low, medium, high) or unordered (e.g. blue, red, green) categorical data, represented as either characters or numerics. This data type is important for modeling and plotting work. Factors can only contain pre-defined values and are how we can add labels to integers. For example, if sampling sites are labeled as numbers (e.g. sites 1, 2, 3), we can use factors to tell `R` that these values are actually categorical rather than continuous.
 
 ```{r using factors}
 
@@ -172,7 +172,7 @@ summary(hues)
 
 # Matrices
 
-Matrices are a special type of collections of vectors. The data is organized into columns and rows giving the matrix dimensions. 
+Matrices are a special type of collection of vectors. The data is organized into columns and rows giving the matrix dimensions. 
 There are many ways to make a matrix, but the default is to fill column-wise.
 
 ```{r creating matrices}
