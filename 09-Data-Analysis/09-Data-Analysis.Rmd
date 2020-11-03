@@ -31,6 +31,7 @@ We are going to use the furseal parasite data that you cleaned previously to fit
 
 ```{r load data}
 library(here)
+library(readr)
 seal <- read_csv(here("cleanedSealData.csv"))
 
 ```
@@ -42,6 +43,8 @@ Replace x, y, and z in the below model function with the names of predictor vari
 
 If you want to include multiple predictor variables you can separate them with a `+`. If you think the different predictors may have an interaction effect, separate them with a `*`.
 
+Use `?summary.lm` and `?anova.lm` to try to interpret the output of your model.
+
 ```{r Linear model}
 
 M1 <- lm(y~x, data = z) # Fit the model
@@ -50,7 +53,6 @@ summary(M1) # Print a summary of the model output
 
 anova(M1) # Print an anova table for the fitted model
 
-plot(M1)  # Plot 4 standard diagnostic plots to assess model fit
 
 ```
 
@@ -86,7 +88,7 @@ summary(M2) # Plot the output of the normal glm from above
 
 ```
 
-But how do we know which model is right? One way to compare models with different distribution specifications is by comparing model diagnostic plots. While we looked at these for `lm` using the `plot` function we'll use another package, `DHARMa` to do this for the more sophisticated glms from `glmmTMB`.
+But how do we know which model is right? One way to compare models with different distribution specifications is by comparing model diagnostic plots. You can look at these for `lm` using the `plot` function but we'll use another package, `DHARMa` to do this for the more sophisticated glms from `glmmTMB`.
 
 ```{r DHARMa comparison}
 library(DHARMa)
@@ -96,6 +98,8 @@ simulateResiduals(M2, plot=T) # Generate diagnostic plots for the normal glm
 simulateResiduals(M3, plot=T) # Generate diagnostic plots for the poisson glm
 
 ```
+
+See this handy resource from the package developers for more details about how to read diagnostic plots: https://cran.r-project.org/web/packages/DHARMa/vignettes/DHARMa.html
 
 So these both look pretty bad......Now it's your turn to find a better distribution! Explore distribution options using `?family`, `?family_glmmTMB` and google. Fit the model as above but with your chosen family, and then compare the model diagnostic plots!
 

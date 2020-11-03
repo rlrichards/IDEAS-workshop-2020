@@ -15,3 +15,17 @@
 	Share in groups - 8 minutes
 	Full group share - 8 minutes
 	Closing - 2 minutes
+
+09 - Data Analysis ~ 60 min
+
+	Intro to first exercise - 8 min
+	LM fitting exercise (with interpretation) - 10 min
+	GLM intro - 2 min
+	GLM Normal exercise - 4 min
+	Poisson intro - 1 min
+	GLM Poisson exercise - 4 min
+	DHARMa diagnostic plots intro - 10 min
+	Individually find better distribution - 7 min
+	Compare with a partner - 4 min
+	Discuss as a large group - 6 min
+	Summary and close - 4 min
