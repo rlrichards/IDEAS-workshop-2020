@@ -1,11 +1,43 @@
-01- What is R ~ 40 min with introductions and walkthrough without time for questions
-04- Functions- ~ 55 min
+01 - What is R ~ 40 min with introductions and walkthrough without time for questions
+
+02 - Code-Along ~ 100 min
+	Brief intro to coding in Rmd	3 min
+	Installing/loading packages	3 min
+	Importing data			2 min
+	Using pipes			7 min
+	Filter function			4 min
+	Add and arrange			3 min +2 min on own
+	Recode and assign		4 min
+	Basic plots			7 min
+	Correlation			2 min
+	Grouping data			10 min
+	Exercise (time permitting)	15 min +7 min share
+
+03 - Data Types ~ 55 min
+	R objects			3 min
+	Atomic classes intro		2 min
+	Data classes			5 min
+	Vectors				7 min
+	Factors				3 min
+	Matrices			7 min
+	Lists				4 min
+	Data frames 			7 min
+	Exercise (time permitting)	7 min +3 min share
+	 			
+04 - Functions ~ 55 min
 	Base R Function exploration 5 minutes +2 to share
 	Function practice 3 minutes
 	If statement practice 4 minutes
 	For loop practice 5-7 minutes
 	Std error function 3 minutes
 	Apply practice 3 minutes
+
+05 - Data Exploration ~ 55 min
+	Data exploration overview	3 min
+	Loading data 			2 min
+	Data structure 			20 min (5 per question)
+	Summary stats			20 min (5 per question)	
+
 06 - Base R Graphics ~ 50 minutes
 	Intro and first chunk - 5min
 	Diagnosing issues with plot - 1 min write 3 min share
@@ -15,6 +47,22 @@
 	Share in groups - 8 minutes
 	Full group share - 8 minutes
 	Closing - 2 minutes
+
+08 - Data Visualization (ggplot2) ~ 100 min
+	Sections
+
+08 - Data Wrangling ~ 55 min
+	Wrangling intro			3 min
+	Seal data intro			2 min
+	Split data			7 min
+	Join data			3 min
+	Cleaning intro			2 min
+	Identifying problems		3 min +3 min share
+	Renaming columns		5 min
+	Recode and NAs			7 min
+	Re-level			2 min
+	Adding variables		10 min
+	Exporting data 			2 min
 
 09 - Data Analysis ~ 60 min
 
