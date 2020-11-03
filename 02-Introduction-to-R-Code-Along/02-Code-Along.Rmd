@@ -28,7 +28,7 @@ With that, let's dive into the exercise! First, we will install the tidyverse pa
 
 # Install the tidyverse
 install.packages("tidyverse")
-install.packages("") # install the `here package to help upload data files
+install.packages("") # install the here package to help upload data files
 
 ```
 
@@ -67,6 +67,7 @@ Now do the same using a pipe, one of the handiest tools in the tidyverse:
 Code using tidyverse syntax starts with `data` and is followed by one or more `verbs` to be done to the data. The data and verbs are linked together using `%>%` which is called a pipe. You can type out the pipe operator or use the shortcut *Cmd+Shift+M*.  
 
 ```{r summarize data with pipe}
+
 # Summarize titanic using a pipe
 
 ```
