@@ -282,11 +282,6 @@ df[] # subsetting a row
 # ...or we can also use the `$` symbol for subsetting by a known column name
 df$ID # returns only the "ID" column
 
-# Lastly we can subset rows of our data based on specific metadata using the `subset()` function
-# Note that this is analogous to the `filter()` function from the tidyverse before
-# Let's make a new data frame showing only data for ID's that "Passed"
-df_passed <- subset()
-
 ```
 
 # Exercise! (Time-Permitting)
