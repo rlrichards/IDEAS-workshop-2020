@@ -310,7 +310,7 @@ ggplot(data = weather_jan, aes(x = time_hour, y = temp)) +
 
 ## Interactive plots
 
-The `plotly` package is an add on to ggplot2 for generating quick interactive plots. It has a few limitations (eg. the legends or other features are often poorly displayed), but the interactive feature maybe useful for data exploration during an in-person meeting.
+The `plotly` package is an add on to ggplot2 for generating quick interactive plots. It has a few limitations (eg. the legends or other features are often poorly displayed), but the interactive feature may be useful for data exploration during an in-person meeting.
 
 ```{r interactive plots}
 
