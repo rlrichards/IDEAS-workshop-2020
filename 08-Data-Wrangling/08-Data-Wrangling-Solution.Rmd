@@ -25,7 +25,7 @@ Some common features of data sets used in disease ecology include:
 * Large external data sets (e.g. climate variables)
 * Unbalanced data
 
-In other words, our data may require a bit of cleaning becore moving forward with visualization and analysis. 
+In other words, our data may require a bit of cleaning before moving forward with visualization and analysis. 
 
 ## Loading, Splitting, and Merging Data
 
@@ -70,7 +70,7 @@ seal <- seal %>%
 # We can accomplish this using the `select()` function to specify columns of interest. 
 # Alternatively, you can use `-` before column names to specify variables you want to remove instead of those you want to keep.
 # We can then export each data frame as a separate csv file.
-# Notice the quotes placed around column names that contain spaces (we'll fix this later!)
+# Notice the tick marks placed around column names that contain spaces (we'll fix this later!)
 seal_worms <- seal %>%
   select(sample_id, animal.id, n.capture, sector, sex, bmi, treatment, `HW Burden`)
 
@@ -96,7 +96,7 @@ str(seal) # explore the structure of the data frame
 
 ## Data Cleaning
 
-Now let's familiarize ourseves more with these new data and see if there are any inconsistencies we need to fix. This can seem a bit tedious but is crucial to avoiding issues and errors down the road!
+Now let's familiarize ourselves more with these new data and see if there are any inconsistencies we need to fix. This can seem a bit tedious but is crucial to avoiding issues and errors down the road!
 
 It is always good practice to use a standard nomenclature for your columns names. Remember that R is sensitive to uppercase and some special characters. Spaces between letters and characters can be also problematic if we are not careful with them. Additionally, it is always good to look at the type of column you have and make sure that R is reading these in agreement with the class of variable they are (e.g. categorical variables as “character” or "factor", continuous variables as “numeric”).
 
@@ -196,7 +196,7 @@ Before we get to visualization and analysis, we may want to add new variables to
 
 For example, we can:
 * Combine existing columns using the `paste()` function
-* Gnerate new, conditional variables from an exisitng column using the `case_when()` function
+* Generate new, conditional variables from an exisitng column using the `case_when()` function
 
 ```{r adding columns}
 
