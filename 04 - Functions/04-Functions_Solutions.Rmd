@@ -182,8 +182,7 @@ a[i]<-i^3  # this is the operation
 ###**Practice**: Write a for loop that makes a vector a that lists whether each value from 1-10 is even or odd 
 Hints: 
 - This will include an if else statement as well!
-- The %% operator gives the remainder when a number is divided by another number
-- so 2 %% 2 = 0; 5 %% 2 = 1
+- There are a lot of ways to determine if a number is even or odd. Google "%% R" to learn how to use the modulus operator (%%) to do this.
 
 ```{r for and if practice}
 a <- c()
@@ -233,10 +232,11 @@ var(dat) # taking the variance
 
 length(dat) # length of vector
 
-sqrt(var(dat)/length(dat)) # standard error
 ```
 
 ###**Practice**: Write a function to compute standard error of dat
+
+## Reminder: Std Error = standard deviation/sqrt(n)
 
 ```{r function12}
 

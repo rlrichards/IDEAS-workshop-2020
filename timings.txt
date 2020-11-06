@@ -26,9 +26,9 @@
 	 			
 04 - Functions ~ 55 min
 	Base R Function exploration 5 minutes +2 to share
-	Function practice 3 minutes
-	If statement practice 4 minutes
-	For loop practice 5-7 minutes
+	Function practice 5 minutes
+	If statement practice (in groups) 5 minutes
+	For loop practice (in groups) 5-7 minutes
 	Std error function 3 minutes
 	Apply practice 3 minutes
 
