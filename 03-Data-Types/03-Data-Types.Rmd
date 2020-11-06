@@ -58,8 +58,8 @@ We can use a few base `R` functions to get information about objects. Some helpf
 # What is the class of myname?
 # Based on the descriptions above, we can guess that is should be a character - let's use the `class()` function to double check. 
 
-?typeof #look up documentation for typeof()
-typeof() #return the object type of "myname"
+?typeof # look up documentation for typeof()
+typeof() # return the object type of "myname"
 
 # How long is the myname object?
 ?length
@@ -67,6 +67,7 @@ length() # This object has a length of one. Why?
 
 # Now let’s make a numeric class object with a length greater than 1
 y <- c(1:10) # colon indicates '1 to 10' 
+y
 typeof(y)
 length(y)
 
