@@ -13,8 +13,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 This module will cover:
 * loading data
+* summarizing and subsetting data
 * calculating simple stats in base R
-*	merging data sets
 
 Along the way, we'll practice the following skills we already covered:
 *	logic statements
@@ -37,6 +37,10 @@ In addition to importing data from an external source (e.g. an xlsx or csv file)
 
 install.packages("") # install package
 library() # load library
+
+nycflights13::
+flights  
+  
 ```
 
 In addition to `flights`, you will notice the `nycflights13` package also includes other data sets including:
@@ -60,16 +64,16 @@ In data exploration, we will first describe the broad trends in the data by unde
 
 # 1. What is the data structure? How many columns and rows are there, and what data is represented in them?
 View(flights) # take a look at the whole flight data set as a separate tab in R studio
-str() 
-names() 
-summary() 
+str() # what information does this function return?
+names() # how about this one?
+summary() # and last but not least, this one?
 
 # 2. How many total flights and how many total flights per airline carrier?
 carrier_table <- flights %>% 
   group_by() %>% 
   summarize(n()) # returns total flights (rows) per airline carrier
 
-?table # this can also be accomplished using the table() function...
+?table # this can also be accomplished using the table() function
 carrier_table <- table()
 carrier_table
 
@@ -83,7 +87,7 @@ nrow()
 # but with `!=` to specify "does not equal"
 
 # 4. What are the different flight destinations? How many destinations are there?
-flights_dest <- unique() # create vector of airport destinations using the unique function
+flights_dest <- unique() # create vector of airport destinations using the unique() function
 
 length() # get number of airport destinations
 
@@ -104,18 +108,22 @@ Descriptive statistics built into R include: `mean`, `sd`, `var`, `min`, `max`, 
 
 # 1. What is the max, min, and mean flight arrival delay? How does the mean arrival delay break down by airline?
 
-?max # check to determine function for excluding NAs in calculation
-max(X, na.rm = T)
+?max # check to determine function for excluding NAs in calculation (what happens if you don't do this?)
+max(, na.rm = T) # find the max
+# find the min
+# find the mean
 
 flights %>%
   group_by() %>%
   summarize(mean_delay = mean())
 
+# Practice: how would you modify the code above to summarize values for both mean arrival AND departure delays?
+
 # 2. What is the most common flight destination?
 flights %>%
   group_by() %>%
   summarize() %>%
-  arrange(desc()) # arranges in descending order
+  arrange() # arranges in descending order
 
 # 3. What is the number of flights per month? Hint: you'll need the `group_by()` and `summarize()` functions again
 flights %>%

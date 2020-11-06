@@ -35,8 +35,8 @@
 05 - Data Exploration ~ 55 min
 	Data exploration overview	3 min
 	Loading data 			2 min
-	Data structure 			20 min (5 per question)
-	Summary stats			20 min (5 per question)	
+	Data structure 			20 min (groups) +5 min share
+	Summary stats			15 min (groups) +5 min share
 
 06 - Base R Graphics ~ 50 minutes
 	Intro and first chunk - 5min
