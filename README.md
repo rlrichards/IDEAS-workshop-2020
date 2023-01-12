@@ -4,11 +4,11 @@ This repository contains the materials used to teach the UGA IDEAS Data Clinic i
 
 Learning Objectives for this material are as follows:
 
-## Section 1: Introduction to R Studio
+### Section 1: Introduction to R Studio
 
 · Navigate R syntax, scripts, and packages
 
-## Section 2: Code-Along
+### Section 2: Code-Along
 
 · Conduct data analysis in R (guided by an expert!)
 
@@ -16,14 +16,13 @@ Learning Objectives for this material are as follows:
 
 · Use exploratory data visualizations and basic summary statistics
 
-
-## Section 3: Data Types
+### Section 3: Data Types
 
 · Understand data types: vectors, matrices, data frames
 
 · Subset various data structures
 
-## Section 4: Writing and Using Functions
+### Section 4: Writing and Using Functions
 
 · Use control statements and functions to organize data
 
@@ -31,17 +30,17 @@ Learning Objectives for this material are as follows:
 
 · Design custom functions
 
-## Section 5: Exploring Data
+### Section 5: Exploring Data
 
 · Use common tools for exploring data sets
 
 · Calculate summary statistics
 
-## Section 6: Visualizing Data – base R
+### Section 6: Visualizing Data – base R
 
 · Explore data through basic data visualizations (e.g. histograms, scatterplots, boxplots)
 
-## Section 7: Visualizing Data – ggplot2
+### Section 7: Visualizing Data – ggplot2
 
 · Use best practices for data visualization
 
@@ -49,7 +48,7 @@ Learning Objectives for this material are as follows:
 
 · Format and customize plots
 
-## Section 8: Wrangling Data
+### Section 8: Wrangling Data
 
 · Apply data cleaning and wrangling tools to disease ecology data
 
@@ -57,7 +56,7 @@ Learning Objectives for this material are as follows:
 
 · Add new descriptive variables based on existing data
 
-## Section 9: Analyzing Data
+### Section 9: Analyzing Data
 
 · Perform basic regression analyses
 
