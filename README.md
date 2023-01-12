@@ -1,6 +1,6 @@
 # IDEAS-workshop-2020
 
-This repository contains the materials used to teach the UGA IDEAS Data Clinic in May 2020. These materials draw from a number of sources and build on the work of those who have taught this class in the past including Reni Kaul, Mauricio Seguel, and Ana Bento. 
+This repository contains the materials used to teach the UGA IDEAS Data Clinic in May 2020. That clinic was taught by Kate Sabey and Robbie Richards. These materials draw from a number of sources and build on the work of those who have taught this class in the past including Reni Kaul, Mauricio Seguel, and Ana Bento. 
 
 Learning Objectives for this material are as follows:
 
